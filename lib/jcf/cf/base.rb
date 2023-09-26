@@ -1,0 +1,117 @@
+# frozen_string_literal: true
+
+require "json"
+require "english"
+require "active_model"
+require "active_model/serializers/json"
+require "active_support/core_ext/hash"
+require "active_support/core_ext/string"
+require "active_support/core_ext/object"
+
+module JCF
+  module CF
+    class Base
+      include ActiveModel::Model
+      include ActiveModel::Serialization
+      include ActiveModel::Validations
+
+      attr_accessor :name, :guid, :relationships, :raw
+
+      validates_presence_of :name, :guid
+
+      def attributes
+        { name: name, guid: guid, relationships: relationships }
+      end
+
+      def initialize(name: nil, guid: nil, relationships: {})
+        @name = name
+        @guid = guid
+        @relationships = Relationships.new(self, relationships)
+      end
+
+      class << self
+        attr_accessor :endpoint
+
+        def find_by(attrs)
+          objects = all
+          objects.find do |obj|
+            # only find by attributes we have and our object has
+            keys = obj.attributes.keys & attrs.keys
+            keys.all? do |key|
+              obj.attributes[key] == attrs[key]
+            end
+          end
+        end
+
+        def first(attrs)
+          find_by(attrs).first
+        end
+
+        def find(guid)
+          new(guid: guid).populate!
+        end
+
+        def all(params = {})
+          # puts "all"
+          params.compact!
+
+          resources(params: params)
+        end
+
+        def resource_url
+          endpoint || name.demodulize.tableize
+        end
+
+        private
+
+        def resources(params: {})
+          params.compact!
+
+          hash = JCF::CF.curl(resource_url, params: params)
+          populate_objects(hash)
+        end
+
+        def populate_objects(hash)
+          hash[:resources].map! do |object|
+            # puts "object: #{object.inspect}"
+            o = new(
+              guid: object[:guid],
+              name: object[:name],
+              relationships: object[:relationships]
+            )
+            o
+          end
+        rescue NoMethodError
+          puts "object is #{hash[:resources]}"
+        end
+      end
+
+      def to_s
+        "#{name} #{guid}"
+      end
+
+      def populate!
+        resource(guid)
+      end
+
+      private
+
+      def resource(guid)
+        object = self.class.all.find { |obj| obj.guid == guid }
+        return object if object
+
+        hash = JCF::CF.curl("#{self.class.resource_url}/#{guid}", params: nil)
+        parse_object(hash)
+      end
+
+      def parse_object(hash)
+        hash[:resources].first if hash[:resources].is_a?(Array)
+
+        guid = hash[:guid]
+        name = hash[:name]
+        relationships = (hash[:relationships] || {})
+        self
+      end
+    end
+  end
+end

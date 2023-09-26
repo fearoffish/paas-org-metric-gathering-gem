@@ -1,0 +1,58 @@
+{
+  "pagination": {
+    "total_results": 1,
+    "total_pages": 1,
+    "first": {
+      "href": "https://cf.example.com/v3/organization_quotas?organization_guids=test-organization-0-guid&page=1&per_page=50"
+    },
+    "last": {
+      "href": "https://cf.example.com/v3/organization_quotas?organization_guids=test-organization-0-guid&page=1&per_page=50"
+    },
+    "next": null,
+    "previous": null
+  },
+  "resources": [
+    {
+      "guid": "test-quota-0-guid",
+      "created_at": "2023-06-27T10:31:08Z",
+      "updated_at": "2023-09-15T17:18:57Z",
+      "name": "test-quota-0-name",
+      "apps": {
+        "total_memory_in_mb": 61440,
+        "per_process_memory_in_mb": null,
+        "total_instances": null,
+        "per_app_tasks": null,
+        "log_rate_limit_in_bytes_per_second": null
+      },
+      "services": {
+        "paid_services_allowed": true,
+        "total_service_instances": 20,
+        "total_service_keys": null
+      },
+      "routes": {
+        "total_routes": 1000,
+        "total_reserved_ports": 0
+      },
+      "domains": {
+        "total_domains": null
+      },
+      "relationships": {
+        "organizations": {
+          "data": [
+            {
+              "guid": "test-organization-0-guid"
+            },
+            {
+              "guid": "other-guid"
+            }
+          ]
+        }
+      },
+      "links": {
+        "self": {
+          "href": "https://cf.example.com/v3/organization_quotas/test-quota-0-guid"
+        }
+      }
+    }
+  ]
+}

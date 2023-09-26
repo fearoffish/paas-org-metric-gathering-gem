@@ -1,0 +1,226 @@
+{
+  "pagination": {
+    "total_results": 6,
+    "total_pages": 1,
+    "first": {
+      "href": "https://cf.example.com/v3/spaces?organization_guids=test-organization-0-guid&page=1&per_page=50"
+    },
+    "last": {
+      "href": "https://cf.example.com/v3/spaces?organization_guids=test-organization-0-guid&page=1&per_page=50"
+    },
+    "next": null,
+    "previous": null
+  },
+  "resources": [
+    {
+      "guid": "test-space-0-guid",
+      "created_at": "2023-06-27T10:53:37Z",
+      "updated_at": "2023-06-27T10:53:37Z",
+      "name": "test-space-0-name",
+      "relationships": {
+        "organization": {
+          "data": {
+            "guid": "test-organization-0-guid"
+          }
+        },
+        "quota": {
+          "data": null
+        }
+      },
+      "metadata": {
+        "labels": {},
+        "annotations": {}
+      },
+      "links": {
+        "self": {
+          "href": "https://cf.example.com/v3/spaces/test-space-0-guid"
+        },
+        "organization": {
+          "href": "https://cf.example.com/v3/organizations/test-organization-0-guid"
+        },
+        "features": {
+          "href": "https://cf.example.com/v3/spaces/test-space-0-guid/features"
+        },
+        "apply_manifest": {
+          "href": "https://cf.example.com/v3/spaces/test-space-0-guid/actions/apply_manifest",
+          "method": "POST"
+        }
+      }
+    },
+    {
+      "guid": "test-space-1-guid",
+      "created_at": "2023-06-27T10:53:39Z",
+      "updated_at": "2023-06-27T10:53:39Z",
+      "name": "test-space-1-name",
+      "relationships": {
+        "organization": {
+          "data": {
+            "guid": "test-organization-0-guid"
+          }
+        },
+        "quota": {
+          "data": null
+        }
+      },
+      "metadata": {
+        "labels": {},
+        "annotations": {}
+      },
+      "links": {
+        "self": {
+          "href": "https://cf.example.com/v3/spaces/test-space-1-guid"
+        },
+        "organization": {
+          "href": "https://cf.example.com/v3/organizations/test-organization-0-guid"
+        },
+        "features": {
+          "href": "https://cf.example.com/v3/spaces/test-space-1-guid/features"
+        },
+        "apply_manifest": {
+          "href": "https://cf.example.com/v3/spaces/test-space-1-guid/actions/apply_manifest",
+          "method": "POST"
+        }
+      }
+    },
+    {
+      "guid": "test-space-2-guid",
+      "created_at": "2023-06-27T10:53:39Z",
+      "updated_at": "2023-06-27T10:53:39Z",
+      "name": "test-space-2-name",
+      "relationships": {
+        "organization": {
+          "data": {
+            "guid": "test-organization-0-guid"
+          }
+        },
+        "quota": {
+          "data": null
+        }
+      },
+      "metadata": {
+        "labels": {},
+        "annotations": {}
+      },
+      "links": {
+        "self": {
+          "href": "https://cf.example.com/v3/spaces/test-space-2-guid"
+        },
+        "organization": {
+          "href": "https://cf.example.com/v3/organizations/test-organization-0-guid"
+        },
+        "features": {
+          "href": "https://cf.example.com/v3/spaces/test-space-2-guid/features"
+        },
+        "apply_manifest": {
+          "href": "https://cf.example.com/v3/spaces/test-space-2-guid/actions/apply_manifest",
+          "method": "POST"
+        }
+      }
+    },
+    {
+      "guid": "test-space-3-guid",
+      "created_at": "2023-06-27T10:53:40Z",
+      "updated_at": "2023-06-27T10:53:40Z",
+      "name": "test-space-3-name",
+      "relationships": {
+        "organization": {
+          "data": {
+            "guid": "test-organization-0-guid"
+          }
+        },
+        "quota": {
+          "data": null
+        }
+      },
+      "metadata": {
+        "labels": {},
+        "annotations": {}
+      },
+      "links": {
+        "self": {
+          "href": "https://cf.example.com/v3/spaces/test-space-3-guid"
+        },
+        "organization": {
+          "href": "https://cf.example.com/v3/organizations/test-organization-0-guid"
+        },
+        "features": {
+          "href": "https://cf.example.com/v3/spaces/test-space-3-guid/features"
+        },
+        "apply_manifest": {
+          "href": "https://cf.example.com/v3/spaces/test-space-3-guid/actions/apply_manifest",
+          "method": "POST"
+        }
+      }
+    },
+    {
+      "guid": "test-space-4-guid",
+      "created_at": "2023-06-27T10:53:41Z",
+      "updated_at": "2023-06-27T10:53:41Z",
+      "name": "test-space-4-name",
+      "relationships": {
+        "organization": {
+          "data": {
+            "guid": "test-organization-0-guid"
+          }
+        },
+        "quota": {
+          "data": null
+        }
+      },
+      "metadata": {
+        "labels": {},
+        "annotations": {}
+      },
+      "links": {
+        "self": {
+          "href": "https://cf.example.com/v3/spaces/test-space-4-guid"
+        },
+        "organization": {
+          "href": "https://cf.example.com/v3/organizations/test-organization-0-guid"
+        },
+        "features": {
+          "href": "https://cf.example.com/v3/spaces/test-space-4-guid/features"
+        },
+        "apply_manifest": {
+          "href": "https://cf.example.com/v3/spaces/test-space-4-guid/actions/apply_manifest",
+          "method": "POST"
+        }
+      }
+    },
+    {
+      "guid": "test-space-5-guid",
+      "created_at": "2023-06-27T10:53:41Z",
+      "updated_at": "2023-06-27T10:53:41Z",
+      "name": "test-space-5-name",
+      "relationships": {
+        "organization": {
+          "data": {
+            "guid": "test-organization-0-guid"
+          }
+        },
+        "quota": {
+          "data": null
+        }
+      },
+      "metadata": {
+        "labels": {},
+        "annotations": {}
+      },
+      "links": {
+        "self": {
+          "href": "https://cf.example.com/v3/spaces/test-space-5-guid"
+        },
+        "organization": {
+          "href": "https://cf.example.com/v3/organizations/test-organization-0-guid"
+        },
+        "features": {
+          "href": "https://cf.example.com/v3/spaces/test-space-5-guid/features"
+        },
+        "apply_manifest": {
+          "href": "https://cf.example.com/v3/spaces/test-space-5-guid/actions/apply_manifest",
+          "method": "POST"
+        }
+      }
+    }
+  ]
+}

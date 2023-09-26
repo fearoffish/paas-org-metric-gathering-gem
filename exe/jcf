@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require "jcf/cli"
+
+cli = Dry::CLI.new(JCF::CLI)
+begin
+  cli.call
+rescue JCF::CLI::NotLoggedInError => e
+  puts "You are not logged in to Cloud Foundry. Please log in and try again."
+  puts e.message
+rescue JCF::CLI::InvalidOptionError => e
+  puts "You need to supply options. Use --help to get details."
+  puts e.message
+end
