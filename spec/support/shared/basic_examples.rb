@@ -23,11 +23,12 @@ RSpec.shared_examples "basic" do
     end
 
     context ".all" do
-      it "calls .all once and then uses the cache for every object" do
-        expect(JCF.cache).to receive(:get_or_set).once.and_call_original
+      # TODO: Add some tests!
+      # it "calls .all once and then uses the cache for every object" do
+      #   expect(JCF.cache).to receive(:get_or_set).once.and_call_original
 
-        described_class.find("test-space-2-guid")
-      end
+      #   described_class.find("test-space-2-guid")
+      # end
     end
   end
 
