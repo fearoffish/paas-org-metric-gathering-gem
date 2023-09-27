@@ -52,7 +52,6 @@ module JCF
         end
 
         def all(params = {})
-          # puts "all"
           params.compact!
 
           resources(params: params)
@@ -73,7 +72,6 @@ module JCF
 
         def populate_objects(hash)
           hash[:resources].map! do |object|
-            # puts "object: #{object.inspect}"
             o = new(
               guid: object[:guid],
               name: object[:name],
@@ -82,7 +80,7 @@ module JCF
             o
           end
         rescue NoMethodError
-          puts "object is #{hash[:resources]}"
+          err.puts "object is #{hash[:resources]}"
         end
       end
 
