@@ -13,7 +13,7 @@ module JCF
           keys = []
           values = []
           if data.is_a?(Array)
-            keys = data.first.attributes.keys
+            keys = data.first&.attributes&.keys || ["Empty result"]
             values = data.map { |d| d.attributes.values.collect(&:to_s) }
           else
             keys = data.attributes.keys

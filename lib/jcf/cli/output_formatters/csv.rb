@@ -9,7 +9,7 @@ module JCF
         def self.format(data)
           if data.is_a?(Enumerable)
             array = data.collect(&:serializable_hash)
-            ::CSV.generate(headers: array.first.keys, write_headers: true) do |csv|
+            ::CSV.generate(headers: array.first&.keys, write_headers: true) do |csv|
               array.each do |hash|
                 csv << hash.values
               end
