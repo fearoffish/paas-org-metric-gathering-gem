@@ -42,6 +42,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "mini_cache", "~> 1.1"
   spec.add_dependency "aws-sdk-cloudwatch", "~> 1.80"
   spec.add_dependency "aws-sdk-rds", "~> 1.80"
+  spec.add_dependency "aws-sdk-s3", "~> 1.80"
   spec.add_dependency "filesize", "~> 0.2.0"
   spec.add_dependency "csv", "~> 3.2"
   spec.add_dependency "tty-table", "~> 0.12.0"

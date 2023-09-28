@@ -7,6 +7,7 @@ module JCF
     class Metric < Base
       attr_accessor :name
       attr_accessor :region
+      attr_accessor :deploy_env
       attr_accessor :organization
       attr_accessor :organization_guid
       attr_accessor :space
