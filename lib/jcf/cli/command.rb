@@ -25,7 +25,7 @@ module JCF
       # mix in the global options
       def self.inherited(klass)
         super
-        klass.option :format, aliases: ["--format"], default: "json", values: %w[text json csv], desc: "Output format"
+        klass.option :format, aliases: ["--format"], default: "text", values: %w[text json csv], desc: "Output format"
         klass.option :output, aliases: ["--output"], desc: "Output file"
 
         klass.prepend(Output)
