@@ -38,7 +38,7 @@ module JCF
             # only find by attributes we have and our object has
             keys = obj.attributes.keys & attrs.keys
             keys.all? do |key|
-              obj.attributes[key] == attrs[key]
+              obj.attributes[key].include? attrs[key]
             end
           end
         end
