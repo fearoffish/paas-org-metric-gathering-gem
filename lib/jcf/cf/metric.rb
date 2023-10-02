@@ -5,21 +5,11 @@ require_relative "base"
 module JCF
   module CF
     class Metric < Base
-      attr_accessor :name
-      attr_accessor :region
-      attr_accessor :deploy_env
-      attr_accessor :organization
-      attr_accessor :organization_guid
-      attr_accessor :space
-      attr_accessor :space_guid
-      attr_accessor :service_broker_name
-      attr_accessor :service_broker_guid
-      attr_accessor :service_offering
-      attr_accessor :service_plan
-      attr_accessor :storage_allocated, :storage_used, :storage_free
-      attr_accessor :iops
-      attr_accessor :cpu
+      attr_accessor :name, :region, :deploy_env, :organization, :organization_guid, :space, :space_guid,
+                    :service_broker_name, :service_broker_guid, :service_offering, :service_plan,
+                    :storage_allocated, :storage_used, :storage_free, :iops, :cpu
 
+      # rubocop:disable Metrics/MethodLength
       def attributes
         {
           name: name,
@@ -39,6 +29,7 @@ module JCF
           cpu: cpu
         }
       end
+      # rubocop:enable Metrics/MethodLength
 
       def to_s
         "#{name}: used(#{storage_used}) allocated(#{storage_allocated}) free(#{storage_free}) iops(#{iops}) cpu(#{cpu})"

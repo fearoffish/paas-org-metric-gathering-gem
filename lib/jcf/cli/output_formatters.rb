@@ -17,7 +17,7 @@ module JCF
     end
 
     def self.register_formatters!
-      Dir[File.join(__dir__, "output_formatters", "*.rb")].sort.each {|f| require f }
+      Dir[File.join(__dir__, "output_formatters", "*.rb")].each { |f| require f }
       OutputFormatters.constants.each do |c|
         OutputFormatters.register_formatter(c.to_s.downcase, OutputFormatters.const_get(c))
       end

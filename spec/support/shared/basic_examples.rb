@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# rubocop:disable Metrics/BlockLength
 RSpec.shared_examples "basic" do
   let(:klass) { described_class.name.demodulize }
   let(:klass_single) { klass.underscore }
@@ -41,7 +44,7 @@ RSpec.shared_examples "basic" do
     end
 
     it "to have a correct count" do
-      json = fixture("#{klass_plural}")
+      json = fixture(klass_plural.to_s)
       count = json[:resources].count
       expect(subject.length).to eq(count)
     end
@@ -113,3 +116,4 @@ RSpec.shared_examples "basic" do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength

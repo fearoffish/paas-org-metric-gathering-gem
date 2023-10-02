@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 # More info at https://github.com/guard/guard#readme
 
-directories(%w(exe lib spec))
-  .select{ |d| Dir.exist?(d) ? d : UI.warning("Directory #{d} does not exist") }
+directories(%w[exe lib spec])
+  .select { |d| Dir.exist?(d) ? d : UI.warning("Directory #{d} does not exist") }
 
 guard :rspec, cmd: "bundle exec rspec" do
   require "guard/rspec/dsl"

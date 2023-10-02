@@ -14,13 +14,16 @@ module JCF
     module Commands
       module CF
         class Metrics < Command
-          argument :env, required: true, values: %w[dev01 dev02 dev03 dev04 dev05 staging prod prod-lon], desc: "Choose an environment"
-          argument :type, required: true, values: %w[postgres aws-s3-bucket], desc: "Choose a service instance type to query", default: "postgres"
+          argument :env, required: true, values: %w[dev01 dev02 dev03 dev04 dev05 staging prod prod-lon],
+                         desc: "Choose an environment"
+          argument :type, required: true, values: %w[postgres aws-s3-bucket],
+                          desc: "Choose a service instance type to query", default: "postgres"
 
-          option :org, aliases: ["-o"], required: true, type: :string, desc: "Choose an organization (can be multiple comma-separated)"
+          option :org, aliases: ["-o"], required: true, type: :string,
+                       desc: "Choose an organization (can be multiple comma-separated)"
           option :name, aliases: ["-n"], type: :string, desc: "Choose a service instance name"
 
-          def call(*args, **options)
+          def call(*_args, **options)
             validate_options(options)
             orgs = options[:org].include?(",") ? options[:org].split(",") : [options[:org]]
 
@@ -50,7 +53,7 @@ module JCF
               )
               err.puts "Found instances: #{instances.count}"
 
-              instances.reject! { |i| i.name != options[:name] } if options[:name]
+              instances.select! { |i| i.name == options[:name] } if options[:name]
 
               cw = JCF::AWS::CloudWatch.new
               values = []
@@ -58,7 +61,7 @@ module JCF
               Thread.abort_on_exception = true
               # use a the number of processors as the number of threads
               instances.each_slice(Concurrent.processor_count) do |slice|
-                threads = slice.collect do |instance|
+                slice.collect do |instance|
                   service_plan = instance.relationships.service_plan.populate!
                   service_offering = service_plan.relationships.service_offering.populate!
                   service_broker = service_offering.relationships.service_broker.populate!

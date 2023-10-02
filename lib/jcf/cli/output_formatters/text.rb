@@ -6,22 +6,32 @@ module JCF
   module CLI
     module OutputFormatters
       class Text
-        # data should be a hash with keys for columns and values for rows
-        def self.format(data)
-          return "" if data.nil?
+        class << self
+          def format(data)
+            return "" if data.nil?
 
-          keys = []
-          values = []
-          if data.is_a?(Array)
-            keys = data.first&.attributes&.keys || ["Empty result"]
-            values = data.map { |d| d.attributes.values.collect(&:to_s) }
-          else
-            keys = data.attributes.keys
-            values = [data.attributes.values.collect(&:to_s)]
+            keys = collect_keys(data)
+            values = collect_values(data)
+
+            table = TTY::Table.new(keys, values)
+            table.render(:unicode)
           end
 
-          table = TTY::Table.new(keys, values)
-          table.render(:unicode)
+          def collect_values(data)
+            if data.is_a?(Array)
+              data.map { |d| d.attributes.values.collect(&:to_s) }
+            else
+              [data.attributes.values.collect(&:to_s)]
+            end
+          end
+
+          def collect_keys(data)
+            if data.is_a?(Array)
+              data.first&.attributes&.keys || ["Empty result"]
+            else
+              data.attributes.keys
+            end
+          end
         end
       end
     end

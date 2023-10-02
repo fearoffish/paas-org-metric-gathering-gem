@@ -1,6 +1,9 @@
 ---
 AllCops:
-  TargetRubyVersion: 2.6
+  NewCops: enable
+  TargetRubyVersion: 3.0
+  Exclude:
+    - 'lib/jcf/cli/commands/cf/metrics.rb'
 
 Style/StringLiterals:
   Enabled: true

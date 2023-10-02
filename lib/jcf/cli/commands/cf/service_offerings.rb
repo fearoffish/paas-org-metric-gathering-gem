@@ -10,7 +10,7 @@ module JCF
         class ServiceOfferings < Command
           argument :name, required: false, desc: "Service Offering name"
 
-          def call(name: nil, **options)
+          def call(name: nil, **_options)
             if name
               out.puts formatter.format(JCF::CF::ServiceOffering.find_by(name: name))
             else

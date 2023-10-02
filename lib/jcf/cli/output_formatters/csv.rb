@@ -6,18 +6,26 @@ module JCF
   module CLI
     module OutputFormatters
       class CSV
-        def self.format(data)
-          if data.is_a?(Enumerable)
-            array = data.collect(&:serializable_hash)
-            ::CSV.generate(headers: array.first&.keys, write_headers: true) do |csv|
-              array.each do |hash|
+        class << self
+          def format(data)
+            case data
+            in Array
+              array = data.collect(&:serializable_hash)
+              generate_csv(headers: array.first&.keys, values: array)
+            in Hash
+              generate_csv(headers: data.keys.sort, values: [data.serializable_hash])
+            else
+              generate_csv(headers: [], values: [])
+            end
+          end
+
+          private
+
+          def generate_csv(headers:, values:)
+            ::CSV.generate(headers: headers, write_headers: true) do |csv|
+              values.each do |hash|
                 csv << hash.values
               end
-            end
-          else
-            hash = data.serializable_hash
-            ::CSV.generate(headers: data.keys.sort, write_headers: true) do |csv|
-              csv << hash.values
             end
           end
         end

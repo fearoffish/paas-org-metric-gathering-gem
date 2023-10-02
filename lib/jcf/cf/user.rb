@@ -14,7 +14,8 @@ module JCF
       end
 
       def initialize(username: nil, guid: nil, presentation_name: nil)
-        @name = name
+        super()
+        @username = username
         @guid = guid
         @presentation_name = presentation_name
       end

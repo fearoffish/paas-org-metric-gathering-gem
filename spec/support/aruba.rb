@@ -1,1 +1,3 @@
-require 'aruba/rspec'
+# frozen_string_literal: true
+
+require "aruba/rspec"

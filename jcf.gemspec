@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary = "Gather metrics from AWS for CloudFoundry installations"
   spec.homepage = "https://gov.uk/"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 2.7.0"
+  spec.required_ruby_version = ">= 3.0.0"
 
   spec.metadata["allowed_push_host"] = "'https://rubygems.com'"
 
@@ -36,20 +36,18 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rake", "~> 13.0"
   spec.add_dependency "zeitwerk", "~> 2.6"
 
-  spec.add_dependency "activesupport", "~> 7.0"
   spec.add_dependency "activemodel", "~> 7.0"
   spec.add_dependency "active_model_serializers", "~> 0.10"
-  spec.add_dependency "mini_cache", "~> 1.1"
+  spec.add_dependency "activesupport", "~> 7.0"
   spec.add_dependency "aws-sdk-cloudwatch", "~> 1.80"
   spec.add_dependency "aws-sdk-rds", "~> 1.80"
   spec.add_dependency "aws-sdk-s3", "~> 1.80"
-  spec.add_dependency "filesize", "~> 0.2.0"
-  spec.add_dependency "csv", "~> 3.2"
-  spec.add_dependency "tty-table", "~> 0.12.0"
   spec.add_dependency "concurrent-ruby", "~> 1.2"
+  spec.add_dependency "csv", "~> 3.2"
   spec.add_dependency "english", "~> 0.7.2"
+  spec.add_dependency "filesize", "~> 0.2.0"
+  spec.add_dependency "mini_cache", "~> 1.1"
+  spec.add_dependency "tty-table", "~> 0.12.0"
 
-  spec.add_development_dependency "aruba", "~> 2.1.0"
-  spec.add_development_dependency "rspec", "~> 3.12"
-  spec.add_development_dependency "rubocop", "~> 1.56"
+  spec.metadata["rubygems_mfa_required"] = "true"
 end

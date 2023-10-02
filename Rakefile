@@ -2,87 +2,86 @@
 
 require "bundler/gem_tasks"
 require "rspec/core/rake_task"
-
-RSpec::Core::RakeTask.new(:spec)
-
 require "rubocop/rake_task"
-
 require "active_support/all"
 
+RSpec::Core::RakeTask.new(:spec)
 RuboCop::RakeTask.new
 
 task default: %i[spec rubocop]
 
 desc "Get all fixtures for an organization: rake get_fixtures[org_name]"
-task :get_fixtures, [:org] do |t, args|
+# rubocop:disable Metrics/LineLength,Metrics/BlockLength
+task :get_fixtures, [:org] do |_t, args|
   raise "Provide an organization name" if args[:org].empty?
+
   `mkdir -p spec/support/fixtures`
 
-  json = curl("/v3/organizations?names=#{args[:org]}", debug: ENV["DEBUG"])
+  json = curl("/v3/organizations?names=#{args[:org]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("organizations", json)
   org = ActiveSupport::JSON.decode(json).deep_symbolize_keys[:resources].first
-  json = curl("/v3/organizations/#{org[:guid]}", debug: ENV["DEBUG"])
+  json = curl("/v3/organizations/#{org[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("organization", json)
   puts "Found organization: #{org[:name]}"
 
-  json = curl("/v3/organization_quotas?organization_guids=#{org[:guid]}", debug: ENV["DEBUG"])
+  json = curl("/v3/organization_quotas?organization_guids=#{org[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("quotas", json)
   quotas = ActiveSupport::JSON.decode(json).deep_symbolize_keys
-  json = curl("/v3/organization_quotas/#{quotas[:resources].first[:guid]}", debug: ENV["DEBUG"])
+  json = curl("/v3/organization_quotas/#{quotas[:resources].first[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("quota", json)
   puts "Found quotas: #{quotas[:resources].count}"
 
-  json = curl("/v3/users", debug: ENV["DEBUG"])
+  json = curl("/v3/users", debug: ENV.fetch("DEBUG", nil))
   # remove resources with a nil username
   users = ActiveSupport::JSON.decode(json).deep_symbolize_keys
   users[:resources].reject! { |u| u[:username].nil? }
   write_fixture("users", json)
-  json = curl("/v3/users/#{users[:resources].first[:guid]}", debug: ENV["DEBUG"])
+  json = curl("/v3/users/#{users[:resources].first[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("user", json)
   puts "Found users: #{users[:resources].count}"
 
   # all spaces in our org
-  json = curl("/v3/spaces?organization_guids=#{org[:guid]}", debug: ENV["DEBUG"])
+  json = curl("/v3/spaces?organization_guids=#{org[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("spaces", json)
   spaces = ActiveSupport::JSON.decode(json).deep_symbolize_keys
-  json = curl("/v3/spaces/#{spaces[:resources].first[:guid]}", debug: ENV["DEBUG"])
+  json = curl("/v3/spaces/#{spaces[:resources].first[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("space", json)
   puts "Found spaces: #{spaces[:resources].count}"
 
   # only the rds-broker
-  json = curl("/v3/service_brokers?names=rds-broker&per_page=5000", debug: ENV["DEBUG"])
+  json = curl("/v3/service_brokers?names=rds-broker&per_page=5000", debug: ENV.fetch("DEBUG", nil))
   write_fixture("service_brokers", json)
   service_brokers = ActiveSupport::JSON.decode(json).deep_symbolize_keys
   broker_guids = service_brokers[:resources].collect { |b| b[:guid] }
   puts "Found service_brokers: #{service_brokers[:resources].count}"
-  json = curl("/v3/service_brokers/#{service_brokers[:resources].first[:guid]}", debug: ENV["DEBUG"])
+  json = curl("/v3/service_brokers/#{service_brokers[:resources].first[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("service_broker", json)
 
   # all the offerings from the rds-broker
-  json = curl("/v3/service_offerings?service_broker_guids=#{broker_guids.join(",")}&per_page=5000", debug: ENV["DEBUG"])
+  json = curl("/v3/service_offerings?service_broker_guids=#{broker_guids.join(",")}&per_page=5000", debug: ENV.fetch("DEBUG", nil))
   write_fixture("service_offerings", json)
   service_offerings = ActiveSupport::JSON.decode(json).deep_symbolize_keys
   offering_guids = service_offerings[:resources].collect { |b| b[:guid] }
   puts "Found service_offerings: #{service_offerings[:resources].count}"
-  json = curl("/v3/service_offerings/#{service_offerings[:resources].first[:guid]}", debug: ENV["DEBUG"])
+  json = curl("/v3/service_offerings/#{service_offerings[:resources].first[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("service_offering", json)
 
   # all the plans from the rds-broker offerings
-  json = curl("/v3/service_plans?service_offering_guids=#{offering_guids.join(",")}&per_page=5000", debug: ENV["DEBUG"])
+  json = curl("/v3/service_plans?service_offering_guids=#{offering_guids.join(",")}&per_page=5000", debug: ENV.fetch("DEBUG", nil))
   write_fixture("service_plans", json)
   service_plans = ActiveSupport::JSON.decode(json).deep_symbolize_keys
   plan_guids = service_plans[:resources].collect { |b| b[:guid] }
   puts "Found service_plans: #{service_plans[:resources].count}"
-  json = curl("/v3/service_plans/#{service_plans[:resources].first[:guid]}", debug: ENV["DEBUG"])
+  json = curl("/v3/service_plans/#{service_plans[:resources].first[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("service_plan", json)
 
   # all the instances of the rds-broker plans
-  json = curl("/v3/service_instances?organization_guids=#{org[:guid]}&service_plan_guids=#{plan_guids.join(",")}&per_page=5000", debug: ENV["DEBUG"])
+  json = curl("/v3/service_instances?organization_guids=#{org[:guid]}&service_plan_guids=#{plan_guids.join(",")}&per_page=5000", debug: ENV.fetch("DEBUG", nil))
   write_fixture("service_instances", json)
   service_instances = ActiveSupport::JSON.decode(json).deep_symbolize_keys
-  instance_guids = service_instances[:resources].collect { |b| b[:guid] }
+  service_instances[:resources].collect { |b| b[:guid] }
   puts "Found service_instances: #{service_instances[:resources].count}"
-  json = curl("/v3/service_instances/#{service_instances[:resources].first[:guid]}", debug: ENV["DEBUG"])
+  json = curl("/v3/service_instances/#{service_instances[:resources].first[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("service_instance", json)
 
   # now let's sanitize all the names and guids
@@ -127,7 +126,7 @@ task :get_fixtures, [:org] do |t, args|
     users[:resources].each_with_index do |user, i|
       puts "replacing #{user[:guid]} with test-user-#{i}-guid"
       puts "replacing #{user[:username]} with test-user-#{i}-username"
-      File.write(f, File.read(f).gsub(%r/#{user[:guid]}/, "test-user-#{i}-guid"))
+      File.write(f, File.read(f).gsub(/#{user[:guid]}/, "test-user-#{i}-guid"))
       # File.write(f, File.read(f).gsub(%r/#{user[:username]}/, "test-user-#{i}-username"))
       # File.write(f, File.read(f).gsub(%r/#{user[:presentation_name]}/, "test-user-#{i}-username"))
     end
@@ -135,8 +134,8 @@ task :get_fixtures, [:org] do |t, args|
     File.write(f, File.read(f).gsub(/#{org[:guid]}/, "test-organization-0-guid"))
     File.write(f, File.read(f).gsub(/#{org[:name]}/, "test-organization-0-name"))
 
-    File.write(f, File.read(f).gsub(/[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}/, 'other-guid'))
-    File.write(f, File.read(f).gsub(/([a-z0-9\-]+\.)+[a-z]{2,}/, 'cf.example.com'))
+    File.write(f, File.read(f).gsub(/[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}/, "other-guid"))
+    File.write(f, File.read(f).gsub(/([a-z0-9-]+\.)+[a-z]{2,}/, "cf.example.com"))
   end
 
   # TODO: validate the files were gsubbed correctly-ish
@@ -154,6 +153,7 @@ task :get_fixtures, [:org] do |t, args|
 
   puts "Done."
 end
+# rubocop:enable Metrics/LineLength,Metrics/BlockLength
 
 task :console do
   exec "irb -r ./lib/jcf.rb"
@@ -167,7 +167,5 @@ def curl(url, debug: false)
 end
 
 def write_fixture(name, contents)
-  File.open("spec/support/fixtures/#{name}.json", "w") do |f|
-    f.write(contents)
-  end
+  File.write("spec/support/fixtures/#{name}.json", contents)
 end

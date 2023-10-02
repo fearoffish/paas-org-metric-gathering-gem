@@ -13,13 +13,13 @@ module JCF
       NAMESPACES = {
         rds: "AWS/RDS",
         s3: "AWS/S3"
-      }
+      }.freeze
       METRICS = {
         free_storage: "FreeStorageSpace",
         allocated_storage: "AllocatedStorage",
         iops: "WriteIOPS",
         cpu: "CPUUtilization"
-      }
+      }.freeze
 
       def storage_free(name:)
         storage_free = rds(name: name, metric: :free_storage)
@@ -29,8 +29,8 @@ module JCF
       def storage_allocated(name:)
         rds = Aws::RDS::Client.new
         size = rds
-                .describe_db_instances(db_instance_identifier: name)
-                .db_instances.first.allocated_storage
+               .describe_db_instances(db_instance_identifier: name)
+               .db_instances.first.allocated_storage
         Filesize.from("#{size} GB").to_i
       end
 
@@ -62,27 +62,29 @@ module JCF
 
       def rds(name:, metric:)
         dimensions = { name: "DBInstanceIdentifier", value: name }
-        aws(name: name, namespace: NAMESPACES[:rds], metric: METRICS[metric], dimensions: dimensions)
+        aws(namespace: NAMESPACES[:rds], metric: METRICS[metric], dimensions: dimensions)
       end
 
-      def aws(name:, namespace:, metric:, dimensions:, start_time: nil, end_time: nil, period: nil, statistic: nil)
+      # rubocop:disable Metrics/ParameterLists, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      def aws(namespace:, metric:, dimensions:, start_time: nil, end_time: nil, period: nil, statistic: nil)
         cloudwatch = Aws::CloudWatch::Client.new
         res = cloudwatch.get_metric_statistics({
-          namespace: namespace,
-          metric_name: metric,
-          dimensions: [dimensions],
-          start_time: (start_time || 1.day.ago),
-          end_time: (end_time || Time.now),
-          period: (period || 86_400),
-          statistics: [(statistic || "Average")]
-        })
+                                                 namespace: namespace,
+                                                 metric_name: metric,
+                                                 dimensions: [dimensions],
+                                                 start_time: (start_time || 1.day.ago),
+                                                 end_time: (end_time || Time.now),
+                                                 period: (period || 86_400),
+                                                 statistics: [(statistic || "Average")]
+                                               })
 
         pp res if ENV["DEBUG"]
 
         res.datapoints.first&.average || 0
-      rescue Aws::Errors::MissingCredentialsError => e
+      rescue Aws::Errors::MissingCredentialsError
         puts "You are not logged in to an AWS shell.  'gds aws <ACCOUNT> -s'"
       end
+      # rubocop:enable Metrics/ParameterLists, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     end
   end
 end

@@ -3,7 +3,7 @@
 require "jcf"
 # require "aruba/rspec"
 
-Dir["./spec/support/**/*.rb"].sort.each { |f| require f  }
+Dir["./spec/support/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

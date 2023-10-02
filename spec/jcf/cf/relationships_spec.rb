@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe JCF::CF::Relationships do
   let(:orgs_hash) do
     {
@@ -24,8 +25,8 @@ RSpec.describe JCF::CF::Relationships do
         expect(subject).to all(be_an_instance_of(JCF::CF::Organization))
       end
 
-      describe "when the relationship has an array of results" do
-      end
+      # describe "when the relationship has an array of results" do
+      # end
     end
 
     describe "#count" do
@@ -101,3 +102,4 @@ RSpec.describe JCF::CF::Relationships do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength

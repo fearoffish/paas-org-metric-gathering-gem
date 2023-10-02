@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
-require "english"
+require "English"
 require "active_model"
 require "active_model/serializers/json"
 require "active_support/core_ext/hash"
@@ -105,9 +105,9 @@ module JCF
       def parse_object(hash)
         hash[:resources].first if hash[:resources].is_a?(Array)
 
-        guid = hash[:guid]
-        name = hash[:name]
-        relationships = (hash[:relationships] || {})
+        hash[:guid]
+        hash[:name]
+        (hash[:relationships] || {})
         self
       end
     end

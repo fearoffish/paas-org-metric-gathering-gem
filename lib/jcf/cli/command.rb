@@ -18,7 +18,7 @@ module JCF
 
           super(*args, **opts)
         ensure
-          @out.close if (@out && @out != $stdout)
+          @out.close if @out && @out != $stdout
         end
       end
 

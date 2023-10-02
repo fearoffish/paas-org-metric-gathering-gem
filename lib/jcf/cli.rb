@@ -11,10 +11,11 @@ module JCF
   end
 
   def self.cache
-    @store ||= MiniCache::Store.new
+    @cache ||= MiniCache::Store.new
   end
 
   module CLI
+    # rubocop:disable Naming/AbcSize, Metrics/MethodLength
     def self.loader
       @loader ||= Zeitwerk::Loader.new.tap do |loader|
         loader.inflector = Zeitwerk::GemInflector.new("#{JCF.root}/jcf.rb")
@@ -31,10 +32,11 @@ module JCF
         loader.inflector.inflect("aws" => "AWS")
       end
     end
+    # rubocop:enable Naming/AbcSize, Metrics/MethodLength
 
     loader.setup
     ActiveSupport::Inflector.inflections(:en) do |inflect|
-      inflect.irregular 'quota', 'quotas'
+      inflect.irregular "quota", "quotas"
     end
 
     require_relative "cli/output_formatters"

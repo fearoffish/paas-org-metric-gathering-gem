@@ -10,7 +10,7 @@ module JCF
         class Users < Command
           argument :name, required: false, desc: "Partial username"
 
-          def call(name: nil, **options)
+          def call(name: nil, **_options)
             if name
               out.puts formatter.format(JCF::CF::User.all(partial_usernames: name))
             else

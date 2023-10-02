@@ -183,6 +183,14 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.29.0)
       parser (>= 3.2.1.0)
+    rubocop-capybara (2.19.0)
+      rubocop (~> 1.41)
+    rubocop-factory_bot (2.24.0)
+      rubocop (~> 1.33)
+    rubocop-rspec (2.24.1)
+      rubocop (~> 1.33)
+      rubocop-capybara (~> 2.17)
+      rubocop-factory_bot (~> 2.22)
     ruby-progressbar (1.13.0)
     strings (0.2.1)
       strings-ansi (~> 0.2)
@@ -211,9 +219,12 @@ PLATFORMS
 
 DEPENDENCIES
   aruba (~> 2.1.0)
+  bundler (~> 2.4)
   jcf!
+  rake (~> 13.0)
   rspec (~> 3.12)
   rubocop (~> 1.56)
+  rubocop-rspec (~> 2.24)
 
 BUNDLED WITH
    2.4.19
