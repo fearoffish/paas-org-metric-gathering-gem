@@ -47,6 +47,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "csv", "~> 3.2"
   spec.add_dependency "tty-table", "~> 0.12.0"
   spec.add_dependency "concurrent-ruby", "~> 1.2"
+  spec.add_dependency "english", "~> 0.7.2"
 
   spec.add_development_dependency "aruba", "~> 2.1.0"
   spec.add_development_dependency "rspec", "~> 3.12"
