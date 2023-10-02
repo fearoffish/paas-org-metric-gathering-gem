@@ -34,7 +34,7 @@ module JCF
 
         def find_by(attrs)
           objects = all
-          objects.find do |obj|
+          objects.find_all do |obj|
             # only find by attributes we have and our object has
             keys = obj.attributes.keys & attrs.keys
             keys.all? do |key|

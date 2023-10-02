@@ -36,7 +36,7 @@ RSpec.shared_examples "basic" do
     before { stub_curl(klass_plural) }
     subject { described_class.all }
 
-    it "return an array" do
+    it "returns an array" do
       expect(subject).to be_an(Array)
     end
 
@@ -58,7 +58,7 @@ RSpec.shared_examples "basic" do
 
   # TODO: actually test this, args aren't tested really
   context ".all(name: name)" do
-    it "will return resources given a name" do
+    it "will return #{described_class} objects" do
       stub_curl(klass_plural)
 
       resources = described_class.all(name: test_name(described_class))
@@ -81,9 +81,11 @@ RSpec.shared_examples "basic" do
     before { stub_curl(klass_plural) }
     subject { described_class }
 
-    it "returns #{described_class}" do
-      object = subject.find_by(guid: test_guid(described_class))
-      expect(object).to be_a(described_class)
+    it "will return #{described_class} objects" do
+      resources = subject.find_by(guid: test_name(described_class))
+      classes = resources.collect(&:class).uniq
+
+      expect(classes.all? { |c| c == described_class }).to be true
     end
   end
 
