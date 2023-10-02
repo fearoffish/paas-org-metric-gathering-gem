@@ -15,6 +15,7 @@ module JCF
           option :service_plan, aliases: ["-p", "--plan", "--service-plan"], type: :string,
                                 desc: "Filter to a service plan"
 
+          # rubocop:disable Metrics/MethodLength
           def call(name: nil, **options)
             if name
               out.puts formatter.format(JCF::CF::ServiceInstance.find_by(name: name))
@@ -28,6 +29,7 @@ module JCF
               )
             end
           end
+          # rubocop:enable Metrics/MethodLength
         end
       end
     end
