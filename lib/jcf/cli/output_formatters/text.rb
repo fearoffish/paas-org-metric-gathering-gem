@@ -14,7 +14,7 @@ module JCF
             values = collect_values(data)
 
             table = TTY::Table.new(keys, values)
-            table.render(:unicode)
+            table.render(:unicode, resize: true)
           end
 
           def collect_values(data)

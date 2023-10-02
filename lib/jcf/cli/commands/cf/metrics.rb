@@ -51,9 +51,8 @@ module JCF
                 organization_guids: org_guid,
                 service_plan_guids: plan_guids.join(",")
               )
+              instances.select! { |i| i.name.include? options[:name] } if options[:name]
               err.puts "Found instances: #{instances.count}"
-
-              instances.select! { |i| i.name == options[:name] } if options[:name]
 
               cw = JCF::AWS::CloudWatch.new
               values = []
