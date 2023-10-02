@@ -1,4 +1,12 @@
 ## [Unreleased]
+## [0.0.8] - 2023-10-02
+
+- Add --org filter to service_offerings command
+- Add --org filter to service_plans command
+- Add --org filter to service_instances command
+- Add --space filter to service_instances command
+- Add --org filter to spaces command
+
 ## [0.0.7] - 2023-10-02
 
 - Add missing gems and tidy up
