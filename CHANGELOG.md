@@ -1,4 +1,8 @@
 ## [Unreleased]
+## [0.0.9] - 2023-10-02
+
+- Automatically increase table width for wide tables
+
 ## [0.0.8] - 2023-10-02
 
 - Add --org filter to service_offerings command
