@@ -1,10 +1,15 @@
 ![tests](https://github.com/fearoffish/paas-org-metric-gathering-gem/actions/workflows/main.yml/badge.svg)
+[![Gem Version](https://badge.fury.io/rb/jcf.svg)](https://badge.fury.io/rb/jcf)
 
 # Jcf
 
 ## Installation
 
-Currently this gem is not available on rubygems.org so you will need to build it yourself. A convenience rake task has been included:
+```sh
+gem install jcf
+```
+
+A convenience rake task has been included to do this locally:
 
 ```sh
 rake install
