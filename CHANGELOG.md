@@ -1,4 +1,8 @@
 ## [Unreleased]
+## [0.0.4] - 2023-10-02
+
+- Add service_offerings command
+
 ## [0.0.3] - 2023-10-02
 
 - Relationships output is now more readable
