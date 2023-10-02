@@ -1,3 +1,5 @@
+![tests](https://github.com/fearoffish/paas-org-metric-gathering-gem/actions/workflows/main.yml/badge.svg)
+
 # Jcf
 
 ## Installation
