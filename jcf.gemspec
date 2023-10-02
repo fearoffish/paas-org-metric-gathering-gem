@@ -9,11 +9,11 @@ Gem::Specification.new do |spec|
   spec.email = ["me@fearof.fish"]
 
   spec.summary = "Gather metrics from AWS for CloudFoundry installations"
-  spec.homepage = "https://gov.uk/"
+  spec.homepage = "https://github.com/fearoffish/paas-org-metric-gathering-gem"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.0.0"
 
-  spec.metadata["allowed_push_host"] = "'https://rubygems.com'"
+  spec.metadata["allowed_push_host"] = "https://rubygems.com"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["github_repo"] = "ssh://github.com/fearoffish/paas-org-metric-gathering-gem"
