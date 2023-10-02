@@ -1,4 +1,8 @@
 ## [Unreleased]
+## [0.0.7] - 2023-10-02
+
+- Add missing gems and tidy up
+
 ## [0.0.6] - 2023-10-02
 
 - Add missing "english" gem to dependencies
