@@ -1,4 +1,8 @@
 ## [Unreleased]
+## [0.0.3] - 2023-10-02
+
+- Relationships output is now more readable
+- Partial lookups for all classes when searching
 ## [0.0.2] - 2023-09-28
 
 - Default to text output instead of json

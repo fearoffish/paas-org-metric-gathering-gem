@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jcf (0.0.2)
+    jcf (0.0.3)
       active_model_serializers (~> 0.10)
       activemodel (~> 7.0)
       activesupport (~> 7.0)
@@ -130,6 +130,8 @@ GEM
     minitest (5.19.0)
     multi_test (1.1.0)
     nokogiri (1.15.4-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.15.4-x86_64-linux)
       racc (~> 1.4)
     parallel (1.23.0)
     parser (3.2.2.3)
