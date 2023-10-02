@@ -1,4 +1,9 @@
 ## [Unreleased]
+## [0.0.6] - 2023-10-02
+
+- Add missing "english" gem to dependencies
+- Add extra platforms to Gemfile.lock
+
 ## [0.0.5] - 2023-10-02
 
 - Searching for objects now returns all matches, not just the first
