@@ -11,7 +11,7 @@ RSpec.describe JCF::CLI::OutputFormatters::JSON do
         described_class.format(JCF::CF::Organization.new(name: "foo", guid: "bar"))
       )
 
-      expect(json).to eq({ "name" => "foo", "guid" => "bar", "relationships" => "[]" })
+      expect(json).to eq({ "name" => "foo", "guid" => "bar", "relationships" => "" })
     end
   end
 end
