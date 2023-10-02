@@ -15,9 +15,15 @@ RSpec.describe JCF::CLI::OutputFormatters::CSV do
       end
     end
 
-    it "returns a table" do
+    it "returns table headers" do
       expect(described_class.format([org, org2])).to include("name,guid").exactly(1).times
+    end
+
+    it "returns table row 1" do
       expect(described_class.format([org, org2])).to include("foo,bar")
+    end
+
+    it "returns table row 2" do
       expect(described_class.format([org, org2])).to include("moo,rar")
     end
 

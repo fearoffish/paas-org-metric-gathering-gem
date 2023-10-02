@@ -10,6 +10,7 @@ module JCF
       attr_reader :belongs_to
 
       def initialize(belongs_to, relationships = {})
+        relationships = {} if relationships.nil?
         raise ArgumentError, "expects a hash" unless relationships.is_a?(Hash)
 
         @belongs_to = belongs_to
@@ -27,7 +28,7 @@ module JCF
       def relationship?(method_name)
         klass = get_klass(method_name)
 
-        matches = @relationships.collect do |relationship|
+        matches = @relationships.filter_map do |relationship|
           relationship.instance_of?(klass) ? relationship : nil
         end.compact
 
@@ -44,9 +45,9 @@ module JCF
         if relationship?(method_name)
           klass = get_klass(method_name)
 
-          matches = @relationships.collect do |relationship|
+          matches = @relationships.filter_map do |relationship|
             relationship.instance_of?(klass) ? relationship : nil
-          end.compact
+          end
 
           matches.size == 1 ? matches.first : matches
         else
@@ -63,6 +64,8 @@ module JCF
       private
 
       def convert_to_classes(relationships = {})
+        return {} if relationships.nil?
+
         relationships.collect do |relationship_type, data_hash|
           klass = get_klass(relationship_type)
           data = make_array(data_hash[:data])

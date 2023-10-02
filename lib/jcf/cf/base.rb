@@ -23,7 +23,7 @@ module JCF
         { name: name, guid: guid, relationships: relationships }
       end
 
-      def initialize(name: nil, guid: nil, relationships: {})
+      def initialize(name: nil, guid: nil, relationships: nil)
         @name = name
         @guid = guid
         @relationships = Relationships.new(self, relationships)

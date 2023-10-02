@@ -21,7 +21,7 @@ RSpec.configure do |config|
   # config.include Aruba::Api
   config.include JCF::CLI::Helpers
 
-  config.before(:each) do
+  config.before do
     JCF.cache.reset
   end
 end

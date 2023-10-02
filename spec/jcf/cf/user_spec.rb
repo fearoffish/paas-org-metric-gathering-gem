@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe JCF::CF::Space do
-  include_examples "basic"
-end
+# TODO: Add user fixtures, in some form of automated way?
+# RSpec.describe JCF::CF::User do
+#   include_examples "basic", { username: String, guid: String, presentation_name: String }
+# end

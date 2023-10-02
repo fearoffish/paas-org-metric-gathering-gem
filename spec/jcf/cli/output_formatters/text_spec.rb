@@ -15,9 +15,15 @@ RSpec.describe JCF::CLI::OutputFormatters::Text do
       end
     end
 
-    it "returns a table" do
+    it "returns the correct number of lines" do
       expect(described_class.format([org, org2])).to include("\n").exactly(5).times
+    end
+
+    it "returns a corner graphic" do
       expect(described_class.format([org, org2])).to include("┌─")
+    end
+
+    it "returns a border graphic" do
       expect(described_class.format([org, org2])).to include("│")
     end
 

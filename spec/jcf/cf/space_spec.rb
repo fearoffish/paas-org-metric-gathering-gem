@@ -3,9 +3,8 @@
 RSpec.describe JCF::CF::Space do
   include_examples "basic"
 
-  context "relationships" do
-    before { stub_curl(klass_plural) }
-    subject do
+  context "with relationships" do
+    subject(:with_org) do
       json = fixture("space")
       described_class.new(
         name: json[:name],
@@ -14,8 +13,10 @@ RSpec.describe JCF::CF::Space do
       )
     end
 
+    before { stub_curl(klass_plural) }
+
     it "has an organization" do
-      expect(subject.relationships.organization).to be_a(JCF::CF::Organization)
+      expect(with_org.relationships.organization).to be_a(JCF::CF::Organization)
     end
   end
 end

@@ -15,7 +15,7 @@ module JCF
   end
 
   module CLI
-    # rubocop:disable Naming/AbcSize, Metrics/MethodLength
+    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def self.loader
       @loader ||= Zeitwerk::Loader.new.tap do |loader|
         loader.inflector = Zeitwerk::GemInflector.new("#{JCF.root}/jcf.rb")
@@ -32,7 +32,7 @@ module JCF
         loader.inflector.inflect("aws" => "AWS")
       end
     end
-    # rubocop:enable Naming/AbcSize, Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
     loader.setup
     ActiveSupport::Inflector.inflections(:en) do |inflect|

@@ -11,7 +11,7 @@ RuboCop::RakeTask.new
 task default: %i[spec rubocop]
 
 desc "Get all fixtures for an organization: rake get_fixtures[org_name]"
-# rubocop:disable Metrics/LineLength,Metrics/BlockLength
+# rubocop:disable Layout/LineLength,Metrics/BlockLength
 task :get_fixtures, [:org] do |_t, args|
   raise "Provide an organization name" if args[:org].empty?
 
@@ -153,11 +153,7 @@ task :get_fixtures, [:org] do |_t, args|
 
   puts "Done."
 end
-# rubocop:enable Metrics/LineLength,Metrics/BlockLength
-
-task :console do
-  exec "irb -r ./lib/jcf.rb"
-end
+# rubocop:enable Layout/LineLength,Metrics/BlockLength
 
 def curl(url, debug: false)
   puts "cf curl \"#{url}\"" if debug
