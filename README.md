@@ -2,26 +2,90 @@
 
 ## Installation
 
-Install the gem and add to the application's Gemfile by executing:
+Currently this gem is not available on rubygems.org so you will need to build it yourself. A convenience rake task has been included:
 
-    $ bundle add jcf
+```sh
+rake install
+jcf 0.0.5 built to pkg/jcf-0.0.5.gem.
+jcf (0.0.5) installed.
+```
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+Or you can just build it instead:
 
-    $ gem install jcf
+```sh
+rake build
+jcf 0.0.5 built to pkg/jcf-0.0.5.gem.
+```
 
 ## Usage
+
+Make sure you're logged into the CloudFoundry you want to query. You can then run the `jcf` command to see the available commands:
 
 ```
 ❯ ./exe/jcf
 Commands:
-  jcf brokers [NAME]
-  jcf instances [NAME]
-  jcf metrics
+  jcf metrics ENV TYPE
   jcf organizations [NAME]
-  jcf plans [NAME]
+  jcf service_brokers [NAME]
+  jcf service_instances [NAME]
+  jcf service_offerings [NAME]
+  jcf service_plans [NAME]
   jcf spaces [NAME]
-  jcf version                           # Print JCF app version
+  jcf users [NAME]
+  jcf version                                 # Print JCF app version
+```
+
+Each command has a `--help` option to show the available options. They also have aliases for the short and long form of the command. For example:
+
+```sh
+jcf organizations
+jcf orgs
+jcf o
+
+jcf service_brokers
+jcf sb
+```
+
+### Examples
+
+Ignoring `metrics`, all other types can list all or filter based on a given name.
+
+#### List all
+
+```sh
+jcf organizations
+```
+
+#### Filter by name
+
+```sh
+jcf organizations my-org
+```
+
+#### Metrics
+
+Metrics are a little different. You need to specify the environment and the service type you want to query. For example:
+
+```sh
+# query the production environment for the service type 'rds-broker'
+jcf metrics production rds-broker
+# query the staging environment for the service type 'aws-s3-bucket-broker'
+jcf metrics staging aws-s3-bucket-broker
+```
+
+### Formatting
+
+The default format is a table. You can also format as JSON or CSV. For example:
+
+```sh
+jcf organizations --format json
+jcf organizations --format csv
+```
+
+When querying metrics, you probably want the output to a file. You can use the `--output` flag for this. Progress will be output to STDERR. For example:
+
+```sh
+jcf metrics production rds-broker --format csv --output rds-broker-metrics.json
 ```
 
 ## Development
