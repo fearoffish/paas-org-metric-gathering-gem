@@ -9,6 +9,7 @@ AllCops:
   TargetRubyVersion: 3.0
   Exclude:
     - 'lib/jcf/cli/commands/cf/metrics.rb'
+    - 'vendor/bundle/**/*'
 
 Style/StringLiterals:
   Enabled: true
