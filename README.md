@@ -6,15 +6,12 @@ Currently this gem is not available on rubygems.org so you will need to build it
 
 ```sh
 rake install
-jcf 0.0.5 built to pkg/jcf-0.0.5.gem.
-jcf (0.0.5) installed.
 ```
 
 Or you can just build it instead:
 
 ```sh
 rake build
-jcf 0.0.5 built to pkg/jcf-0.0.5.gem.
 ```
 
 ## Usage
@@ -22,7 +19,7 @@ jcf 0.0.5 built to pkg/jcf-0.0.5.gem.
 Make sure you're logged into the CloudFoundry you want to query. You can then run the `jcf` command to see the available commands:
 
 ```
-❯ ./exe/jcf
+$ jcf
 Commands:
   jcf metrics ENV TYPE
   jcf organizations [NAME]
@@ -64,7 +61,9 @@ jcf organizations my-org
 
 #### Metrics
 
-Metrics are a little different. You need to specify the environment and the service type you want to query. For example:
+> **_NOTE:_** Metrics are a little different. They are specific to the gov.uk PaaS. Plans to make this more generic are in the works.
+
+You need to specify the environment and the service type you want to query. For example:
 
 ```sh
 # query the production environment for the service type 'rds-broker'
@@ -78,7 +77,12 @@ jcf metrics staging aws-s3-bucket-broker
 The default format is a table. You can also format as JSON or CSV. For example:
 
 ```sh
+# as json
 jcf organizations --format json
+```
+
+```sh
+# as csv
 jcf organizations --format csv
 ```
 
