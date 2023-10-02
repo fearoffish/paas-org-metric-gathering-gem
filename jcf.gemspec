@@ -16,6 +16,7 @@ Gem::Specification.new do |spec|
   spec.metadata["allowed_push_host"] = "'https://rubygems.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
+  spec.metadata["github_repo"] = "ssh://github.com/fearoffish/paas-org-metric-gathering-gem"
   spec.metadata["source_code_uri"] = "https://github.com/fearoffish/paas-org-metric-gathering-gem"
   spec.metadata["changelog_uri"] = "https://github.com/fearoffish/paas-org-metric-gathering-gem/CHANGELOG"
 

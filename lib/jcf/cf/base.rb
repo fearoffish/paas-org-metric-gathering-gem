@@ -79,8 +79,6 @@ module JCF
             )
             o
           end
-        rescue NoMethodError
-          err.puts "object is #{hash[:resources]}"
         end
       end
 

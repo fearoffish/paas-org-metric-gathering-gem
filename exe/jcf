@@ -13,4 +13,9 @@ rescue JCF::CLI::NotLoggedInError => e
 rescue JCF::CLI::InvalidOptionError => e
   puts "You need to supply options. Use --help to get details."
   puts e.message
+rescue NoMethodError => e
+  puts "Unexpected error. Please report this."
+  puts
+  puts e.message
+  puts e.backtrace
 end

@@ -18,7 +18,7 @@ module JCF
             else
               out.puts formatter.format(
                 JCF::CF::ServiceBroker.all(
-                  space: options[:space]
+                  space_guids: options[:space]
                 )
               )
             end

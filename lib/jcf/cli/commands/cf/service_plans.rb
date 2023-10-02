@@ -18,7 +18,7 @@ module JCF
             else
               out.puts formatter.format(
                 JCF::CF::ServicePlan.all(
-                  organization: options[:org]
+                  organization_guids: options[:org]
                 )
               )
             end

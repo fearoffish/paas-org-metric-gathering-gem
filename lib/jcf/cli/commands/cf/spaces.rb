@@ -16,7 +16,7 @@ module JCF
             if name
               out.puts formatter.format(JCF::CF::Space.find_by(name: name))
             else
-              out.puts formatter.format(JCF::CF::Space.all(organization: options[:org]))
+              out.puts formatter.format(JCF::CF::Space.all(organization_guids: options[:org]))
             end
           end
         end

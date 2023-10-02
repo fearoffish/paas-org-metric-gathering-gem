@@ -10,8 +10,8 @@ module JCF
         class ServiceInstances < Command
           argument :name, required: false, desc: "Service Instance name"
 
-          option :org, aliases: ["-o", "--org", "--organization"], type: :string, desc: "Filter to an organization"
-          option :space, aliases: ["-s", "--space"], type: :string, desc: "Filter to a space"
+          option :org, aliases: ["-o", "--org", "--organization"], type: :string, desc: "Filter to an organization guid"
+          option :space, aliases: ["-s", "--space"], type: :string, desc: "Filter to a space guid"
           option :service_plan, aliases: ["-p", "--plan", "--service-plan"], type: :string,
                                 desc: "Filter to a service plan"
 
@@ -20,8 +20,11 @@ module JCF
               out.puts formatter.format(JCF::CF::ServiceInstance.find_by(name: name))
             else
               out.puts formatter.format(
-                JCF::CF::ServiceInstance.all(organization: options[:org], space: options[:space],
-                                             service_plan: options[:service_plan])
+                JCF::CF::ServiceInstance.all(
+                  organization_guids: options[:org],
+                  space_guids: options[:space],
+                  service_plan: options[:service_plan]
+                )
               )
             end
           end

@@ -58,7 +58,7 @@ module JCF
       def to_s
         @relationships.collect do |relationship|
           "#{relationship.class.name.demodulize}: #{relationship.name || ""} (#{relationship.guid})"
-        end.join("\n")
+        end.join(', ')
       end
 
       private
