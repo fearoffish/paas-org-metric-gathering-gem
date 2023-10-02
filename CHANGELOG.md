@@ -1,4 +1,8 @@
 ## [Unreleased]
+## [0.0.5] - 2023-10-02
+
+- Searching for objects now returns all matches, not just the first
+
 ## [0.0.4] - 2023-10-02
 
 - Add service_offerings command

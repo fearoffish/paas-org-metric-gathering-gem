@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jcf (0.0.4)
+    jcf (0.0.5)
       active_model_serializers (~> 0.10)
       activemodel (~> 7.0)
       activesupport (~> 7.0)
