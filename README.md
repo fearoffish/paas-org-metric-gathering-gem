@@ -63,13 +63,17 @@ jcf organizations my-org
 
 > **_NOTE:_** Metrics are a little different. They are specific to the gov.uk PaaS. Plans to make this more generic are in the works.
 
-You need to specify the environment and the service type you want to query. For example:
+You need to specify the environment and the service type you want to query.
+
+Query the `production` environment, `rds-broker` service for the organization `my-org`:
 
 ```sh
-# query the production environment for the service type 'rds-broker'
-jcf metrics production rds-broker
-# query the staging environment for the service type 'aws-s3-bucket-broker'
-jcf metrics staging aws-s3-bucket-broker
+jcf metrics production rds-broker --org=my-org
+```
+
+Query the `staging` environment, `aws-s3-bucket-broker` service for the organizations `my-org` and `my-org2`:
+```sh
+jcf metrics staging aws-s3-bucket-broker --org=my-org,my-org2
 ```
 
 ### Formatting
@@ -89,7 +93,10 @@ jcf organizations --format csv
 When querying metrics, you probably want the output to a file. You can use the `--output` flag for this. Progress will be output to STDERR. For example:
 
 ```sh
-jcf metrics production rds-broker --format csv --output rds-broker-metrics.json
+jcf metrics production rds-broker \
+  --org=my-org \
+  --format csv \
+  --output rds-broker-metrics.json
 ```
 
 ## Development
