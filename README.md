@@ -1,4 +1,4 @@
-![tests](https://github.com/fearoffish/paas-org-metric-gathering-gem/actions/workflows/main.yml/badge.svg)
+[![tests](https://github.com/fearoffish/paas-org-metric-gathering-gem/actions/workflows/main.yml/badge.svg)](https://github.com/fearoffish/paas-org-metric-gathering-gem/actions)
 [![Gem Version](https://badge.fury.io/rb/jcf.svg)](https://badge.fury.io/rb/jcf)
 
 # Jcf
