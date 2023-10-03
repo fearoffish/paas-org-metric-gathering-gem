@@ -3,6 +3,23 @@
 
 # Jcf
 
+## What is it?
+
+If you use CloudFoundry you'll know that some commands/queries require you to use `cf curl` and that can get a little tedious. This gem is a wrapper around `cf curl` to make it easier to query the CloudFoundry API, as well as being able to query the CloudWatch metrics for the AWS services that are used by the CF services.
+
+Some handy features:
+
+```
+jcf u jamie # find all users with a partial username of jamie
+jcf o foo  # find all orgs with a partial name of foo
+jcf sb s3 # find all service brokers with a partial name of s3
+jcf so bucket # find all service offerings with a partial name of bucket
+jcf sp medium # find all service plans with a partial name of medium
+
+# find all metrics for the rds-broker service, postgres offering, output it to a csv file
+jcf m postgres -t 'rdsbroker-{guid}' -o admin -f csv --ouput postgres-metrics.csv
+```
+
 ## Installation
 
 ```sh
