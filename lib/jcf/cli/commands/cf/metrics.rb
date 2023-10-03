@@ -14,11 +14,13 @@ module JCF
     module Commands
       module CF
         class Metrics < Command
-          argument :env, required: true, values: %w[dev01 dev02 dev03 dev04 dev05 staging prod prod-lon],
-                         desc: "Choose an environment"
-          argument :type, required: true, values: %w[postgres aws-s3-bucket],
-                          desc: "Choose a service instance type to query", default: "postgres"
+          argument :offering, required: true, values: %w[postgres aws-s3-bucket],
+                          desc: "Choose a service instance offering to query"
 
+          option :template, aliases: ["-t"], required: true, type: :string,
+                   desc: "Template for backend service instance names e.g. \"rdsbroker-{guid}-{name}\""
+          option :values, aliases: ["-v"], required: false, type: :string, default: "",
+                   desc: "Values for the template. 'guid' is the service instance guid e.g. \"name=test\""
           option :org, aliases: ["-o"], required: true, type: :string,
                        desc: "Choose an organization (can be multiple comma-separated)"
           option :name, aliases: ["-n"], type: :string, desc: "Choose a service instance name"
@@ -31,11 +33,11 @@ module JCF
               org_guid = organizations.find { |o| o.name == org }.guid
               err.puts "Found org guid: #{org_guid}"
 
-              offering_guid = service_offerings.find { |s| s.name == options[:type] }&.guid
+              offering_guid = service_offerings.find { |s| s.name == options[:offering] }&.guid
               err.puts "Found offering guid: #{offering_guid}"
 
               unless offering_guid
-                err.puts "No offerings found for type #{options[:type]}"
+                err.puts "No offerings found for type #{options[:offering]}"
                 exit(1)
               end
 
@@ -64,11 +66,6 @@ module JCF
                   service_plan = instance.relationships.service_plan.populate!
                   service_offering = service_plan.relationships.service_offering.populate!
                   service_broker = service_offering.relationships.service_broker.populate!
-                  # puts "Getting metrics for #{instance.name}"
-                  # puts "service_plan: #{service_plan.name}"
-                  # puts "service_offering: #{service_offering.name}"
-                  # puts "service_broker: #{service_broker.name}"
-                  # return nil
 
                   Thread.new do
                     m = JCF::CF::Metric.new
@@ -85,15 +82,20 @@ module JCF
                     m.service_broker_guid = service_broker.guid
                     m.service_offering = service_offering.name
                     m.service_plan = service_plan.name
+
+                    template = options[:template]
+                    t_values = parse_values(options[:values], instance.guid)
+
                     if service_offering.name == "postgres"
-                      m.storage_used = to_gb(cw.rds_storage_used(name: rds_guid(instance.guid)) || "")
-                      m.storage_allocated = to_gb(cw.storage_allocated(name: rds_guid(instance.guid)) || "")
-                      m.storage_free = to_gb(cw.storage_free(name: rds_guid(instance.guid)) || "")
-                      m.iops = (cw.iops(name: rds_guid(instance.guid)).to_fs(:rounded, precision: 0) || "")
-                      m.cpu = (cw.cpu(name: rds_guid(instance.guid)).to_fs(:rounded, precision: 0) || "")
+                      m.storage_used = to_gb(cw.rds_storage_used(name: JCF::CLI.template_parser(template, t_values)) || "")
+                        m.storage_allocated = to_gb(cw.storage_allocated(name: JCF::CLI.template_parser(template, t_values)) || "")
+                        m.storage_free = to_gb(cw.storage_free(name: JCF::CLI.template_parser(template, t_values)) || "")
+                        m.iops = (cw.iops(name: JCF::CLI.template_parser(template, t_values)).to_fs(:rounded, precision: 0) || "")
+                        m.cpu = (cw.cpu(name: JCF::CLI.template_parser(template, t_values)).to_fs(:rounded, precision: 0) || "")
                     end
+
                     if service_offering.name == "aws-s3-bucket"
-                      m.storage_used = to_gb(cw.s3_storage_used(name: s3_guid(options[:env], instance.guid)) || "")
+                      m.storage_used = to_gb(cw.s3_storage_used(name: JCF::CLI.template_parser(template, t_values)) || "")
                     end
                     values << m
                   end
@@ -108,16 +110,14 @@ module JCF
 
           private
 
-          def rds_guid(guid)
-            "rdsbroker-#{guid}"
-          end
-
-          def s3_guid(deploy_env, guid)
-            "paas-s3-broker-#{deploy_env}-#{guid}"
-          end
-
           def validate_options(options)
             raise JCF::CLI::InvalidOptionError, "No organization given" unless options[:org]
+          end
+
+          def parse_values(values, guid)
+            values = values.split(",")
+            values << "guid=#{guid}"
+            values.join(",")
           end
 
           def organizations
