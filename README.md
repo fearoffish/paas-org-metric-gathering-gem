@@ -68,20 +68,31 @@ jcf organizations my-org
 
 #### Metrics
 
-> **_NOTE:_** Metrics are a little different. They are specific to the gov.uk PaaS. Plans to make this more generic are in the works.
+Metrics queries AWS for backend CloudWatch metrics. It will output a table of the metrics for each service instance.
 
-You need to specify the environment and the service type you want to query.
+Because CF doesn't give access to the underlying AWS details for us to query, we have to make some assumptions:
 
-Query the `production` environment, `rds-broker` service for the organization `my-org`:
+- You need to be logged into the AWS account that the CF is using
+- The AWS account has the correct permissions to query the metrics
+
+We need a `template` for the instance names on AWS. This is a regex that will be used to match the instance names. For example, the `rds-broker` service has instances with names like `rdsbroker-GUID1`, `rdsbroker-GUID2`, etc. The template for this would be `rdsbroker-{guid}`.
+
+Examples for the template, note that guid is a special value that is filled automatically with the instance guid from CF:
+
+- `rdsbroker-{guid}`
+- `s3broker-{guid}`
+- `s3broker-{guid}-bucket-{name}`
+
+When you supply a template token that is _not_ `guid`, you need to supply a `--values` flag to fill in the value. For example:
 
 ```sh
-jcf metrics production rds-broker --org=my-org
+jcf metrics OFFERING \
+  --org=my-org \
+  --template='rdsbroker-{guid}-{name}' \
+  --values='name=foobar'
 ```
 
-Query the `staging` environment, `aws-s3-bucket-broker` service for the organizations `my-org` and `my-org2`:
-```sh
-jcf metrics staging aws-s3-bucket-broker --org=my-org,my-org2
-```
+`jcf` will use the template to determine the AWS guid to query for metrics.
 
 ### Formatting
 
