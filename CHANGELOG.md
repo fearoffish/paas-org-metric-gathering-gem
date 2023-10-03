@@ -1,4 +1,10 @@
-## [Unreleased]
+## [0.0.10] - 2023-10-03
+
+- Added the template parsing options to metrics command
+  This allows you to specify the AWS instance name with a template, and
+  then supply the values to fill in the template with the --values flag.
+  This makes metrics available to everyone, maybe.
+
 ## [0.0.9] - 2023-10-02
 
 - Automatically increase table width for wide tables
