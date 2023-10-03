@@ -34,6 +34,18 @@ module JCF
     end
     # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
+    # template parsing: "{guid}-{name}", "guid=1234,name=test"
+    # TODO: add some form of validation and error handling
+    def self.template_parser(template, values)
+      result = template.dup
+
+      (values || "").split(",").each do |value|
+        key, val = value.split("=")
+        result.gsub!("{#{key}}", val)
+      end
+      result
+    end
+
     loader.setup
     ActiveSupport::Inflector.inflections(:en) do |inflect|
       inflect.irregular "quota", "quotas"
