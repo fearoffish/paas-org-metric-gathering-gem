@@ -1,3 +1,7 @@
+## [0.0.11] - 2023-10-12
+
+- Add a tree output for a new command `jcf services NAME` that will show all the offerings and instances for that broker. In a tree. Because trees are cool.
+
 ## [0.0.10] - 2023-10-03
 
 - Added the template parsing options to metrics command
