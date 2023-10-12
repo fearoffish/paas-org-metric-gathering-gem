@@ -7,14 +7,26 @@ module JCF
     module OutputFormatters
       class Text
         class << self
-          def format(data)
+          def format(data, tree: false)
             return "" if data.nil?
 
+            if tree
+              render_tree(data)
+            else
+              render_data(data)
+            end
+          end
+
+          def render_data(data)
             keys = collect_keys(data)
             values = collect_values(data)
 
             table = TTY::Table.new(keys, values)
             table.render(:unicode, resize: true)
+          end
+
+          def render_tree(data)
+            TTY::Tree.new(data).render
           end
 
           def collect_values(data)

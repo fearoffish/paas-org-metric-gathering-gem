@@ -47,6 +47,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "filesize", "~> 0.2.0"
   spec.add_dependency "mini_cache", "~> 1.1"
   spec.add_dependency "tty-table", "~> 0.12.0"
+  spec.add_dependency "tty-tree", "~> 0.4.0"
 
   spec.metadata["rubygems_mfa_required"] = "true"
 end

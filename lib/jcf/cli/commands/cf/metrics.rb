@@ -14,7 +14,7 @@ module JCF
     module Commands
       module CF
         class Metrics < Command
-          argument :offering, required: true, values: %w[postgres aws-s3-bucket],
+          argument :offering, required: true, values: %w[postgres mysql aws-s3-bucket],
                           desc: "Choose a service instance offering to query"
 
           option :template, aliases: ["-t"], required: true, type: :string,

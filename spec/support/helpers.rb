@@ -26,6 +26,15 @@ module JCF
       def test_name(resource, number = 0)
         "test-#{resource.name.demodulize.underscore.dasherize}-#{number}-name"
       end
+
+      def test_object(name, klass)
+        json = fixture(name)
+        klass.new(
+          name: json[:name],
+          guid: json[:guid],
+          relationships: json[:relationships]
+        )
+      end
     end
   end
 end
