@@ -41,6 +41,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "aws-sdk-cloudwatch", "~> 1.80"
   spec.add_dependency "aws-sdk-rds", "~> 1.80"
   spec.add_dependency "aws-sdk-s3", "~> 1.80"
+  spec.add_dependency "aws-sdk-elasticache", "~> 1.80"
   spec.add_dependency "concurrent-ruby", "~> 1.2"
   spec.add_dependency "csv", "~> 3.2"
   spec.add_dependency "english", "~> 0.7.2"
