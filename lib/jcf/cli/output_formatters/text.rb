@@ -7,8 +7,8 @@ module JCF
     module OutputFormatters
       class Text
         class << self
-          def format(data, tree: false)
-            return "" if data.nil?
+          def format(data:, tree: false)
+            return "" if data.nil? || data.empty?
 
             if tree
               render_tree(data)
@@ -16,6 +16,8 @@ module JCF
               render_data(data)
             end
           end
+
+          private
 
           def render_data(data)
             keys = collect_keys(data)
@@ -29,19 +31,30 @@ module JCF
             TTY::Tree.new(data).render
           end
 
-          def collect_values(data)
+          def collect_keys(data)
+            return ["Empty result"] if !data || data.empty?
+
             if data.is_a?(Array)
-              data.map { |d| d.attributes.values.collect(&:to_s) }
+              data.first.keys.collect(&:to_s)
+            elsif data.is_a?(Hash)
+              data.keys.collect(&:to_s) || ["Empty result"]
             else
-              [data.attributes.values.collect(&:to_s)]
+              data.keys.collect(&:to_s)
             end
           end
 
-          def collect_keys(data)
+          # Hash:
+          #   values: [["name1", "name2"], ["space1", "space2"]]
+          #   output: [["name1", "space1"], ["name2", "space2"]]
+          def collect_values(data)
+            return [["Empty result"]] if !data || data.empty?
+
             if data.is_a?(Array)
-              data.first&.attributes&.keys || ["Empty result"]
+              data.map { |d| d.attributes.values.collect(&:to_s) }
+            elsif data.is_a?(Hash)
+              data.values.transpose
             else
-              data.attributes.keys
+              [data.attributes.values.collect(&:to_s)]
             end
           end
         end

@@ -7,24 +7,12 @@ module JCF
     module OutputFormatters
       class CSV
         class << self
-          def format(data)
-            case data
-            in Array
-              array = data.collect(&:serializable_hash)
-              generate_csv(headers: array.first&.keys, values: array)
-            in Hash
-              generate_csv(headers: data.keys.sort, values: [data.serializable_hash])
-            else
-              generate_csv(headers: [], values: [])
-            end
-          end
+          def format(data:)
+            return "" if data.nil? || data.empty?
 
-          private
-
-          def generate_csv(headers:, values:)
-            ::CSV.generate(headers: headers, write_headers: true) do |csv|
-              values.each do |hash|
-                csv << hash.values
+            ::CSV.generate(headers: data.keys, write_headers: true) do |csv|
+              data.values.transpose.each do |value|
+                csv << value
               end
             end
           end

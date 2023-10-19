@@ -8,14 +8,17 @@ module JCF
     module Commands
       module CF
         class Organizations < Command
+          include JCF::CF
+
           argument :name, required: false, desc: "Organization name"
 
           def call(name: nil, **)
-            if name
-              out.puts formatter.format(JCF::CF::Organization.find_by(name: name))
+            values = if name
+              Organization.find_by(name: name).collect(&:values)
             else
-              out.puts formatter.format(JCF::CF::Organization.all)
+              Organization.all.collect(&:values)
             end
+            out.puts formatter.format(headers: Organization.keys, values: values)
           end
         end
       end

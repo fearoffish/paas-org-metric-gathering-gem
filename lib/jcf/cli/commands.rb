@@ -7,6 +7,7 @@ module JCF
 
     def self.register_commands!
       register "version", Commands::Version, aliases: ["v", "-v", "--version"]
+      register "plugins", Commands::Plugins
       register "metrics", Commands::CF::Metrics, aliases: ["m"]
 
       register "organizations", Commands::CF::Organizations, aliases: %w[o orgs organization]

@@ -23,6 +23,14 @@ module JCF
         { name: name, guid: guid, relationships: relationships }
       end
 
+      def keys
+        attributes.keys
+      end
+
+      def values
+        attributes.values
+      end
+
       def initialize(name: nil, guid: nil, relationships: nil)
         @name = name
         @guid = guid
@@ -32,12 +40,14 @@ module JCF
       class << self
         attr_accessor :endpoint
 
+        def keys; new.keys; end
+
         def find_by(attrs)
           objects = all
           objects.find_all do |obj|
-            # only find by attributes we have and our object has
             keys = obj.attributes.keys & attrs.keys
             keys.all? do |key|
+              return true if attrs[key].nil?
               obj.attributes[key].include? attrs[key]
             end
           end
@@ -51,6 +61,7 @@ module JCF
           new(guid: guid).populate!
         end
 
+        # TODO: make this less greedy
         def all(params = {})
           params.compact!
 

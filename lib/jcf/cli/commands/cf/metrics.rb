@@ -14,38 +14,51 @@ module JCF
     module Commands
       module CF
         class Metrics < Command
-          argument :offering, required: true, values: %w[postgres mysql aws-s3-bucket],
-                          desc: "Choose a service instance offering to query"
+          argument :broker, required: true,
+            desc: "Choose a service instance offering to query. Get the broker name from the command: jcf sb"
+          argument :iaas_plugin, aliases: ["-m"], required: true, type: :string,
+            values: ::JCF::Plugins.plugins.keys.collect(&:to_s),
+            desc: "Select a IaaS plugin this broker is backed by"
 
           option :template, aliases: ["-t"], required: true, type: :string,
-                   desc: "Template for backend service instance names e.g. \"rdsbroker-{guid}-{name}\""
+            desc: "Template for backend service instance names e.g. \"rdsbroker-{guid}-{name}\""
           option :values, aliases: ["-v"], required: false, type: :string, default: "",
-                   desc: "Values for the template. 'guid' is the service instance guid e.g. \"name=test\""
+            desc: "Values for the template. 'guid' is the service instance guid e.g. \"name=test\""
           option :org, aliases: ["-o"], required: true, type: :string,
-                       desc: "Choose an organization (can be multiple comma-separated)"
+            desc: "Choose an organization (can be multiple comma-separated)"
           option :name, aliases: ["-n"], type: :string, desc: "Choose a service instance name"
 
           def call(*_args, **options)
             validate_options(options)
+            JCF.plugin options[:iaas_plugin].to_sym
+            plugin = JCF::Plugins.plugins[options[:iaas_plugin].to_sym]
+
             orgs = options[:org].include?(",") ? options[:org].split(",") : [options[:org]]
+
+            brokers = service_brokers.select { |b| b.name == options[:broker] }
+            # find the offerings for those brokers
+            offerings = service_offerings.select do |o|
+              brokers.find { |b| b.guid == o.relationships.service_broker.guid }
+            end
+            if offerings && offerings.empty?
+              err.puts "No offerings found for broker #{options[:broker]}"
+              exit(1)
+            end
+            err.puts "Found #{offerings.count} offerings"
 
             orgs.each do |org|
               org_guid = organizations.find { |o| o.name == org }.guid
               err.puts "Found org guid: #{org_guid}"
 
-              offering_guid = service_offerings.find { |s| s.name == options[:offering] }&.guid
-              err.puts "Found offering guid: #{offering_guid}"
-
-              unless offering_guid
-                err.puts "No offerings found for type #{options[:offering]}"
-                exit(1)
-              end
-
-              # find the plans for those gatherings
+              # find the plans for those offerings
               plan_guids = service_plans.find_all do |plan|
-                plan.relationships.service_offering.guid == offering_guid
+                offerings.collect(&:guid).include? plan.relationships.service_offering.guid
               end.collect(&:guid)
               err.puts "Found plan guids: #{plan_guids.count}"
+              if plan_guids.empty?
+                err.puts "No plans found for offerings"
+                exit(1)
+              end
 
               # look up the instances that match the plans and org
               # "/v3/service_instances?organization_guids=${org_guids}&service_plan_guids=${plan_guids}"
@@ -56,11 +69,9 @@ module JCF
               instances.select! { |i| i.name.include? options[:name] } if options[:name]
               err.puts "Found instances: #{instances.count}"
 
-              cw = JCF::AWS::CloudWatch.new
-              values = []
+              values = {}
 
               Thread.abort_on_exception = true
-              # use a the number of processors as the number of threads
               instances.each_slice(Concurrent.processor_count) do |slice|
                 slice.collect do |instance|
                   service_plan = instance.relationships.service_plan.populate!
@@ -68,42 +79,42 @@ module JCF
                   service_broker = service_offering.relationships.service_broker.populate!
 
                   Thread.new do
-                    m = JCF::CF::Metric.new
-                    m.name = (instance.name || "")
-                    err.puts "Getting metrics for #{m.name}"
-                    m.region = ENV["AWS_REGION"]
-                    m.deploy_env = options[:env]
-                    m.organization = org
-                    m.organization_guid = org_guid
+                    metrics = {}
+                    metrics[:name] = (instance.name || "")
+                    metrics[:instance_guid] = instance.guid
+                    err.puts "Getting metrics for #{instance.name}"
+                    metrics[:region] = ENV["AWS_REGION"]
+                    metrics[:organization] = org
+                    metrics[:organization_guid] = org_guid
                     space = spaces.find { |s| s.guid == instance.relationships.space.guid }
-                    m.space = space.name
-                    m.space_guid = space.guid
-                    m.service_broker_name = service_broker.name
-                    m.service_broker_guid = service_broker.guid
-                    m.service_offering = service_offering.name
-                    m.service_plan = service_plan.name
+                    metrics[:space] = space.name
+                    metrics[:space_guid] = space.guid
+                    metrics[:service_broker_name] = service_broker.name
+                    metrics[:service_broker_guid] = service_broker.guid
+                    metrics[:service_offering] = service_offering.name
+                    metrics[:service_plan] = service_plan.name
 
                     template = options[:template]
                     t_values = parse_values(options[:values], instance.guid)
 
-                    if service_offering.name == "postgres"
-                      m.storage_used = to_gb(cw.rds_storage_used(name: JCF::CLI.template_parser(template, t_values)) || "")
-                        m.storage_allocated = to_gb(cw.storage_allocated(name: JCF::CLI.template_parser(template, t_values)) || "")
-                        m.storage_free = to_gb(cw.storage_free(name: JCF::CLI.template_parser(template, t_values)) || "")
-                        m.iops = (cw.iops(name: JCF::CLI.template_parser(template, t_values)).to_fs(:rounded, precision: 0) || "")
-                        m.cpu = (cw.cpu(name: JCF::CLI.template_parser(template, t_values)).to_fs(:rounded, precision: 0) || "")
+                    t = JCF::CLI.template_parser(template, t_values)
+                    plugin.new(name: t).metrics.each do |k, v|
+                      metrics[k] = v
                     end
-
-                    if service_offering.name == "aws-s3-bucket"
-                      m.storage_used = to_gb(cw.s3_storage_used(name: JCF::CLI.template_parser(template, t_values)) || "")
-                    end
-                    values << m
+                    values[instance.guid] = metrics
                   end
-                end.map(&:value)
+                end.each(&:join)
               end
 
-              values << JCF::CF::Metric.new if values.empty?
-              out.puts formatter.format(values)
+              # values = { guid: { name: "name", space: "space" }, guid2: { name: "name2", space: "space2" } }
+              output = Hash.new { |hash, key| hash[key] = [] }
+              values.each do |guid, metrics|
+                metrics.each do |k, v|
+                  output[k] << v
+                end
+              end
+
+              out.puts formatter.format(data: output)
               err.puts "Done."
             end
           end
@@ -141,13 +152,7 @@ module JCF
           end
 
           def service_brokers
-            JCF::CF::ServiceBroker.all
-          end
-
-          def to_gb(bytes)
-            Filesize.from("#{bytes} b").to("GB").to_fs(:rounded, precision: 2)
-          rescue ArgumentError
-            0
+            @service_brokers ||= JCF::CF::ServiceBroker.all
           end
         end
       end

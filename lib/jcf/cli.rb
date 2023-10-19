@@ -14,6 +14,50 @@ module JCF
     @cache ||= MiniCache::Store.new
   end
 
+  def self.plugin(plugin)
+    plugin = JCF::Plugins.load_plugin(plugin) if plugin.is_a?(Symbol)
+    validate_plugin!(plugin)
+    plugin.load_dependencies(self, *args, &block) if plugin.respond_to?(:load_dependencies)
+    plugin.configure(self, *args, &block) if plugin.respond_to?(:configure)
+  end
+
+  def self.validate_plugin!(plugin)
+    puts "Validating plugin (#{plugin}) implementation conforms to interface" if ENV["DEBUG"]
+
+    %i[metrics names values].each do |method|
+      raise "Plugin does not conform to interface (missing method \"#{method.to_s}\")" \
+        unless plugin.new(name: nil).respond_to?(method)
+    end
+  rescue JCF::CLI::NotLoggedInError => e
+    puts e.message
+    exit 1
+  end
+
+  module Plugins
+    @plugins = {}
+
+    def self.plugins
+      @plugins
+    end
+
+    def self.load_plugin(name)
+      return @plugins[name] if @plugins[name]
+
+      puts "Loading plugin #{name}" if ENV["DEBUG"]
+      require "jcf/plugins/#{name}"
+      raise "Plugin didn't correctly register itself" unless @plugins[name]
+      @plugins[name]
+    end
+
+    # Plugins need to call this method to register themselves:
+    #
+    #   JCF::Plugins.register_plugin :render, Render
+    def self.register_plugin(name, mod)
+      puts "Registering plugin #{name}" if ENV["DEBUG"]
+      @plugins[name] = mod
+    end
+  end
+
   module CLI
     # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def self.loader
@@ -59,7 +103,9 @@ module JCF
 
     extend Dry::CLI::Registry
 
+    puts "Loading formatters..." if ENV["DEBUG"]
     register_formatters!
+    puts "Loading commands..." if ENV["DEBUG"]
     register_commands!
   end
 end
