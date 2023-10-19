@@ -98,8 +98,6 @@ module JCF
     require_relative "cli/output_formatters"
     require_relative "cli/commands"
     require_relative "cli/errors"
-    # require_relative "cf.rb"
-    require_relative "aws/cloudwatch"
 
     extend Dry::CLI::Registry
 
