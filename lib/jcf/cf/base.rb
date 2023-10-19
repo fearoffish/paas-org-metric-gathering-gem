@@ -40,7 +40,7 @@ module JCF
       class << self
         attr_accessor :endpoint
 
-        def keys; new.keys; end
+        def keys = new.keys
 
         def find_by(attrs)
           objects = all
@@ -48,6 +48,7 @@ module JCF
             keys = obj.attributes.keys & attrs.keys
             keys.all? do |key|
               return true if attrs[key].nil?
+
               obj.attributes[key].include? attrs[key]
             end
           end

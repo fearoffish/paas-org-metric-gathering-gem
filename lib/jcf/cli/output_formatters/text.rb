@@ -20,8 +20,8 @@ module JCF
           private
 
           def render_data(data)
-            keys = collect_keys(data)
-            values = collect_values(data)
+            keys = data.keys.collect(&:to_s)
+            values = data.values.transpose
 
             table = TTY::Table.new(keys, values)
             table.render(:unicode, resize: true)
@@ -29,33 +29,6 @@ module JCF
 
           def render_tree(data)
             TTY::Tree.new(data).render
-          end
-
-          def collect_keys(data)
-            return ["Empty result"] if !data || data.empty?
-
-            if data.is_a?(Array)
-              data.first.keys.collect(&:to_s)
-            elsif data.is_a?(Hash)
-              data.keys.collect(&:to_s) || ["Empty result"]
-            else
-              data.keys.collect(&:to_s)
-            end
-          end
-
-          # Hash:
-          #   values: [["name1", "name2"], ["space1", "space2"]]
-          #   output: [["name1", "space1"], ["name2", "space2"]]
-          def collect_values(data)
-            return [["Empty result"]] if !data || data.empty?
-
-            if data.is_a?(Array)
-              data.map { |d| d.attributes.values.collect(&:to_s) }
-            elsif data.is_a?(Hash)
-              data.values.transpose
-            else
-              [data.attributes.values.collect(&:to_s)]
-            end
           end
         end
       end

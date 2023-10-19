@@ -9,16 +9,11 @@ module JCF
     module Commands
       module CF
         class Services < Command
-          argument :broker, required: false, desc: "Broker name"
+          argument :broker, required: true, desc: "Broker name"
 
-          def call(broker: nil, **)
+          def call(broker:, **)
             # gather all service offerings and plans for a single broker
-            if broker
-              out.puts formatter.format(JCF::CF::Services.first(name: broker), tree: true)
-            else
-              # TODO: this is a stub, it should be a list of all brokers
-              # out.puts formatter.format(JCF::CF::Organization.all)
-            end
+            out.puts formatter.format(JCF::CF::Services.first(name: broker), tree: true)
           end
         end
       end

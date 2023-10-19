@@ -5,6 +5,7 @@ module JCF
     module Commands
     end
 
+    # rubocop:disable Metrics/MethodLength
     def self.register_commands!
       register "version", Commands::Version, aliases: ["v", "-v", "--version"]
       register "plugins", Commands::Plugins
@@ -19,5 +20,6 @@ module JCF
       register "service_instances", Commands::CF::ServiceInstances, aliases: %w[si service_instance]
       register "service_plans", Commands::CF::ServicePlans, aliases: %w[sp service_plan]
     end
+    # rubocop:enable Metrics/MethodLength
   end
 end

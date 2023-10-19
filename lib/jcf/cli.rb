@@ -25,7 +25,7 @@ module JCF
     puts "Validating plugin (#{plugin}) implementation conforms to interface" if ENV["DEBUG"]
 
     %i[metrics names values].each do |method|
-      raise "Plugin does not conform to interface (missing method \"#{method.to_s}\")" \
+      raise "Plugin does not conform to interface (missing method \"#{method}\")" \
         unless plugin.new(name: nil).respond_to?(method)
     end
   rescue JCF::CLI::NotLoggedInError => e
@@ -46,6 +46,7 @@ module JCF
       puts "Loading plugin #{name}" if ENV["DEBUG"]
       require "jcf/plugins/#{name}"
       raise "Plugin didn't correctly register itself" unless @plugins[name]
+
       @plugins[name]
     end
 

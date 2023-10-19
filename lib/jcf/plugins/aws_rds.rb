@@ -33,7 +33,7 @@ module JCF
       end
 
       def to_s
-       metrics.to_s
+        metrics.to_s
       end
 
       private
@@ -59,8 +59,8 @@ module JCF
       def storage_allocated(name:)
         rds = Aws::RDS::Client.new
         size = rds
-                .describe_db_instances(db_instance_identifier: name)
-                .db_instances.first.allocated_storage
+               .describe_db_instances(db_instance_identifier: name)
+               .db_instances.first.allocated_storage
         Filesize.from("#{size} GB").to_i
       end
 
@@ -78,18 +78,18 @@ module JCF
         cloudwatch(name: name, metric: :cpu)
       end
 
-      # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      # rubocop:disable Metrics/MethodLength
       def cloudwatch(name:, metric:)
         cloudwatch = Aws::CloudWatch::Client.new
         res = cloudwatch.get_metric_statistics({
-          namespace: "AWS/RDS",
-          metric_name: metric,
-          dimensions: [{ name: "DBInstanceIdentifier", value: name }],
-          start_time: 1.day.ago,
-          end_time: Time.now,
-          period: 86_400,
-          statistics: ["Average"]
-        })
+                                                 namespace: "AWS/RDS",
+                                                 metric_name: metric,
+                                                 dimensions: [{ name: "DBInstanceIdentifier", value: name }],
+                                                 start_time: 1.day.ago,
+                                                 end_time: Time.now,
+                                                 period: 86_400,
+                                                 statistics: ["Average"]
+                                               })
 
         pp res if ENV["DEBUG"]
 
@@ -97,7 +97,7 @@ module JCF
       rescue Aws::Errors::MissingCredentialsError
         puts "You are not logged in to an AWS shell.  'gds aws <ACCOUNT> -s'"
       end
-      # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      # rubocop:enable Metrics/MethodLength
 
       def to_gb(bytes)
         Filesize.from("#{bytes} b").to("GB").to_fs(:rounded, precision: 2)

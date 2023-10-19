@@ -14,10 +14,10 @@ module JCF
 
           def call(name: nil, **)
             values = if name
-              Organization.find_by(name: name).collect(&:values)
-            else
-              Organization.all.collect(&:values)
-            end
+                       Organization.find_by(name: name).collect(&:values)
+                     else
+                       Organization.all.collect(&:values)
+                     end
             out.puts formatter.format(headers: Organization.keys, values: values)
           end
         end
