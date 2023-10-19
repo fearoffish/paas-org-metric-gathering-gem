@@ -9,7 +9,12 @@ module JCF
         def self.format(data:)
           return "{}" if data.nil? || data.empty?
 
-          data.to_json
+          array = data.values.first.length.times.map do |i|
+            data.each_with_object({}) do |(key, values), acc|
+              acc[key] = values[i]
+            end
+          end
+          array.to_json
         end
       end
     end
