@@ -1,3 +1,9 @@
+## [0.0.12] - 2023-10-19
+
+- Refactored broker backend querying for metrics to use a plugin system that can be extended to support other brokers. Currently only the AWS and S3 broker is supported, but it should be easy to add others.
+- Add a `jcf plugins` command to list available plugins (currently only ones in the `lib/jcf/plugins` directory)
+- Refactored specs for output formatters
+
 ## [0.0.11] - 2023-10-12
 
 - Add a tree output for a new command `jcf services NAME` that will show all the offerings and instances for that broker. In a tree. Because trees are cool.
