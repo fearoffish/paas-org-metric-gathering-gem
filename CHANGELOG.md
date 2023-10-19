@@ -1,3 +1,7 @@
+## [0.0.13] - 2023-10-19
+
+- Fix a bug where I'd left in some unnecessary code
+
 ## [0.0.12] - 2023-10-19
 
 - Refactored broker backend querying for metrics to use a plugin system that can be extended to support other brokers. Currently only the AWS and S3 broker is supported, but it should be easy to add others.
