@@ -2,35 +2,33 @@
 
 RSpec.describe JCF::CLI::OutputFormatters::CSV do
   describe ".format" do
-    let(:org) { JCF::CF::Organization.new(name: "foo", guid: "bar") }
-    let(:org2) { JCF::CF::Organization.new(name: "moo", guid: "rar") }
+    let(:data) { { header1: ["name1", "name2"], header2: ["space1", "space2"] } }
+    subject(:text) { described_class.format(data: data) }
 
-    it "returns an empty string when given nil" do
-      expect(described_class.format(nil)).to eq("\n")
+    it "outputs \"\"' when given nil" do
+      expect(described_class.format(data: nil)).to eq("")
     end
 
-    it "returns all entries" do
-      %w[foo bar moo rar].each do |keyword|
-        expect(described_class.format([org, org2])).to include(keyword)
+    it "outputs \"\" when given an empty hash" do
+      expect(described_class.format(data: {})).to eq("")
+    end
+
+    describe "when given a hash" do
+      it "has headers separated by a comma on line 1" do
+        expect(line_number 1).to eq("header1,header2")
+      end
+
+      it "contains the first values on line 2" do
+        expect(line_number 2).to eq("name1,space1")
+      end
+
+      it "contains the second values on line 3" do
+        expect(line_number 3).to eq("name2,space2")
       end
     end
+  end
 
-    it "returns table headers" do
-      expect(described_class.format([org, org2])).to include("name,guid").exactly(1).times
-    end
-
-    it "returns table row 1" do
-      expect(described_class.format([org, org2])).to include("foo,bar")
-    end
-
-    it "returns table row 2" do
-      expect(described_class.format([org, org2])).to include("moo,rar")
-    end
-
-    it "returns a single line for a single entry" do
-      %w[foo bar].each do |keyword|
-        expect(described_class.format([org])).to include(keyword)
-      end
-    end
+  def line_number(number)
+    text.split("\n")[number - 1]
   end
 end

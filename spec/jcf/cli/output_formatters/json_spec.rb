@@ -2,16 +2,17 @@
 
 RSpec.describe JCF::CLI::OutputFormatters::JSON do
   describe ".format" do
-    it "returns an empty JSON string" do
-      expect(described_class.format({})).to eq("[]")
+    let(:data) { { header1: ["name1", "name2"], header2: ["space1", "space2"] } }
+    subject(:text) { described_class.format(data: data) }
+
+    it "returns an empty JSON string when given nil" do
+      expect(described_class.format(data: {})).to eq("{}")
     end
 
-    it "returns a valid JSON string" do
-      json = JSON.parse(
-        described_class.format(JCF::CF::Organization.new(name: "foo", guid: "bar"))
-      )
+    it "returns a valid JSON string when given valid data" do
+      json = JSON.parse(text)
 
-      expect(json).to eq({ "name" => "foo", "guid" => "bar", "relationships" => "" })
+      expect(json).to eq({ "header1" => ["name1", "name2"], "header2" => ["space1", "space2"] })
     end
   end
 end
