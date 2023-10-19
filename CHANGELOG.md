@@ -1,3 +1,7 @@
+## [0.0.14] - 2023-10-19
+
+- Fix all the output I broker in the last release...I need some more extensive tests
+
 ## [0.0.13] - 2023-10-19
 
 - Fix a bug where I'd left in some unnecessary code
