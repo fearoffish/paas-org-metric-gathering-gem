@@ -13,12 +13,12 @@ module JCF
           argument :name, required: false, desc: "Organization name"
 
           def call(name: nil, **)
-            values = if name
-                       Organization.find_by(name: name).collect(&:values)
-                     else
-                       Organization.all.collect(&:values)
-                     end
-            out.puts formatter.format(headers: Organization.keys, values: values)
+            data = if name
+                     Organization.find_by(name: name)
+                   else
+                     Organization.all
+                   end
+            out.puts formatter.format(data: JCF::CF::Base.format(data))
           end
         end
       end

@@ -13,7 +13,7 @@ module JCF
 
           def call(broker:, **)
             # gather all service offerings and plans for a single broker
-            out.puts formatter.format(JCF::CF::Services.first(name: broker), tree: true)
+            out.puts formatter.format(data: JCF::CF::Services.first(name: broker), tree: true)
           end
         end
       end

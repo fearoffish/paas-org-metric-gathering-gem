@@ -107,6 +107,7 @@ module JCF
               end
 
               # values = { guid: { name: "name", space: "space" }, guid2: { name: "name2", space: "space2" } }
+              # output = { header1: %w[name1 name2], header2: %w[space1 space2]}
               output = Hash.new { |hash, key| hash[key] = [] }
               values.each do |guid, metrics|
                 metrics.each do |k, v|

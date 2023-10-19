@@ -7,6 +7,19 @@ module JCF
     module OutputFormatters
       class Text
         class << self
+          # @param data [Hash] the data to be formatted
+          # @param tree [Boolean] whether to format as a tree or a table
+          # @return [String] the formatted data
+          # @example
+          #
+          # data: { header1: %w[name1 name2], header2: %w[space1 space2]}
+          # output:
+          # ┌────────┬────────┐
+          # │header1 │header2 │
+          # ├────────┼────────┤
+          # │name1   │space1  │
+          # │name2   │space2  │
+          # └────────┴────────┘
           def format(data:, tree: false)
             return "" if data.nil? || data.empty?
 
@@ -19,6 +32,12 @@ module JCF
 
           private
 
+          # @param data [Hash] the data to be formatted
+          # @return [String] the formatted data
+          # @example
+          #
+          # data: { header1: %w[name1 name2], header2: %w[space1 space2]}
+          # values: [["name1", "space1"], ["name2", "space2"]]
           def render_data(data)
             keys = data.keys.collect(&:to_s)
             values = data.values.transpose

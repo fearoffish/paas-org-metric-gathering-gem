@@ -13,11 +13,12 @@ module JCF
           option :org, aliases: ["-o", "--org", "--organization"], type: :string, desc: "Filter to an organization"
 
           def call(name: nil, **options)
-            if name
-              out.puts formatter.format(JCF::CF::Quota.find_by(name: name))
-            else
-              out.puts formatter.format(JCF::CF::Quota.all(org: options[:org]))
-            end
+            data = if name
+                     JCF::CF::Quota.find_by(name: name)
+                   else
+                     JCF::CF::Quota.all(org: options[:org])
+                   end
+            out.puts formatter.format(data: JCF::CF::Base.format(data))
           end
         end
       end

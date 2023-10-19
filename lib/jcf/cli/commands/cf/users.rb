@@ -11,11 +11,13 @@ module JCF
           argument :name, required: false, desc: "Partial username"
 
           def call(name: nil, **_options)
-            if name
-              out.puts formatter.format(JCF::CF::User.all(partial_usernames: name))
-            else
-              out.puts formatter.format(JCF::CF::User.all)
-            end
+            data = if name
+                     JCF::CF::User.all(partial_usernames: name)
+                   else
+                     JCF::CF::User.all
+                   end
+
+            out.puts formatter.format(data: JCF::CF::Base.format(data))
           end
         end
       end

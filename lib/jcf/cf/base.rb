@@ -73,6 +73,15 @@ module JCF
           endpoint || name.demodulize.tableize
         end
 
+        def format(data)
+          data.each_with_object({}) do |broker, h|
+            broker.attributes.each do |k, v|
+              h[k] ||= []
+              h[k] << v
+            end
+          end
+        end
+
         private
 
         def resources(params: {})

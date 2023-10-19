@@ -8,19 +8,25 @@ module JCF
     module Commands
       module CF
         class ServiceBrokers < Command
+          include JCF::CF
+
           argument :name, required: false, desc: "Service Broker name"
 
           option :space, aliases: ["-s", "--space"], type: :string, desc: "Filter to a space"
 
           def call(name: nil, **options)
             if name
-              out.puts formatter.format(JCF::CF::ServiceBroker.find_by(name: name))
+              out.puts formatter.format(data: JCF::CF::ServiceBroker.find_by(name: name))
             else
-              out.puts formatter.format(
-                JCF::CF::ServiceBroker.all(
-                  space_guids: options[:space]
-                )
-              )
+              # [
+              #   #<ServiceBroker @name="cdn-broker", @guid="aaaa", @relationships=[]>,
+              #   #<ServiceBroker @name="rds-broker", @guid="bbbb", @relationships=[]>
+              # ]
+              # output = { name: %w[cdn-broker rds-broker], header2: %w[aaaa bbbb]}
+
+              data = ServiceBroker.all(space_guids: options[:space])
+
+              out.puts formatter.format(data: JCF::CF::Base.format(data))
             end
           end
         end

@@ -5,13 +5,9 @@ module JCF
     class Error < StandardError
     end
 
-    class NotImplementedError < Error
-    end
-
-    class NotLoggedInError < StandardError
-    end
-
-    class InvalidOptionError < StandardError
-    end
+    class NotImplementedError < Error; end
+    class NotLoggedInError < StandardError; end
+    class InvalidOptionError < StandardError; end
+    class EmptyResultError < StandardError; end
   end
 end
