@@ -75,7 +75,7 @@ module JCF
 
         res.datapoints.first&.average || 0
       rescue Aws::Errors::MissingCredentialsError
-        puts "You are not logged in to an AWS shell.  'gds aws <ACCOUNT> -s'"
+        $stderr.puts "You are not logged in to an AWS shell.  'gds aws <ACCOUNT> -s'"
       end
       # rubocop:enable Metrics/MethodLength
 

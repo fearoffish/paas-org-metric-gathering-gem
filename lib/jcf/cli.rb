@@ -22,14 +22,14 @@ module JCF
   end
 
   def self.validate_plugin!(plugin)
-    puts "Validating plugin (#{plugin}) implementation conforms to interface" if ENV["DEBUG"]
+    $stderr.puts "Validating plugin (#{plugin}) implementation conforms to interface" if ENV["DEBUG"]
 
     %i[metrics names values].each do |method|
       raise "Plugin does not conform to interface (missing method \"#{method}\")" \
         unless plugin.new(name: nil).respond_to?(method)
     end
   rescue JCF::CLI::NotLoggedInError => e
-    puts e.message
+    $stderr.puts e.message
     exit 1
   end
 
@@ -43,7 +43,7 @@ module JCF
     def self.load_plugin(name)
       return @plugins[name] if @plugins[name]
 
-      puts "Loading plugin #{name}" if ENV["DEBUG"]
+      $stderr.puts "Loading plugin #{name}" if ENV["DEBUG"]
       require "jcf/plugins/#{name}"
       raise "Plugin didn't correctly register itself" unless @plugins[name]
 
@@ -54,7 +54,7 @@ module JCF
     #
     #   JCF::Plugins.register_plugin :render, Render
     def self.register_plugin(name, mod)
-      puts "Registering plugin #{name}" if ENV["DEBUG"]
+      $stderr.puts "Registering plugin #{name}" if ENV["DEBUG"]
       @plugins[name] = mod
     end
   end
@@ -102,9 +102,9 @@ module JCF
 
     extend Dry::CLI::Registry
 
-    puts "Loading formatters..." if ENV["DEBUG"]
+    $stderr.puts "Loading formatters..." if ENV["DEBUG"]
     register_formatters!
-    puts "Loading commands..." if ENV["DEBUG"]
+    $stderr.puts "Loading commands..." if ENV["DEBUG"]
     register_commands!
   end
 end

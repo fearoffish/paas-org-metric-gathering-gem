@@ -22,14 +22,14 @@ task :get_fixtures, [:org] do |_t, args|
   org = ActiveSupport::JSON.decode(json).deep_symbolize_keys[:resources].first
   json = curl("/v3/organizations/#{org[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("organization", json)
-  puts "Found organization: #{org[:name]}"
+  $stderr.puts "Found organization: #{org[:name]}"
 
   json = curl("/v3/organization_quotas?organization_guids=#{org[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("quotas", json)
   quotas = ActiveSupport::JSON.decode(json).deep_symbolize_keys
   json = curl("/v3/organization_quotas/#{quotas[:resources].first[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("quota", json)
-  puts "Found quotas: #{quotas[:resources].count}"
+  $stderr.puts "Found quotas: #{quotas[:resources].count}"
 
   json = curl("/v3/users", debug: ENV.fetch("DEBUG", nil))
   # remove resources with a nil username
@@ -38,7 +38,7 @@ task :get_fixtures, [:org] do |_t, args|
   write_fixture("users", json)
   json = curl("/v3/users/#{users[:resources].first[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("user", json)
-  puts "Found users: #{users[:resources].count}"
+  $stderr.puts "Found users: #{users[:resources].count}"
 
   # all spaces in our org
   json = curl("/v3/spaces?organization_guids=#{org[:guid]}", debug: ENV.fetch("DEBUG", nil))
@@ -46,14 +46,14 @@ task :get_fixtures, [:org] do |_t, args|
   spaces = ActiveSupport::JSON.decode(json).deep_symbolize_keys
   json = curl("/v3/spaces/#{spaces[:resources].first[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("space", json)
-  puts "Found spaces: #{spaces[:resources].count}"
+  $stderr.puts "Found spaces: #{spaces[:resources].count}"
 
   # only the rds-broker
   json = curl("/v3/service_brokers?names=rds-broker&per_page=5000", debug: ENV.fetch("DEBUG", nil))
   write_fixture("service_brokers", json)
   service_brokers = ActiveSupport::JSON.decode(json).deep_symbolize_keys
   broker_guids = service_brokers[:resources].collect { |b| b[:guid] }
-  puts "Found service_brokers: #{service_brokers[:resources].count}"
+  $stderr.puts "Found service_brokers: #{service_brokers[:resources].count}"
   json = curl("/v3/service_brokers/#{service_brokers[:resources].first[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("service_broker", json)
 
@@ -62,7 +62,7 @@ task :get_fixtures, [:org] do |_t, args|
   write_fixture("service_offerings", json)
   service_offerings = ActiveSupport::JSON.decode(json).deep_symbolize_keys
   offering_guids = service_offerings[:resources].collect { |b| b[:guid] }
-  puts "Found service_offerings: #{service_offerings[:resources].count}"
+  $stderr.puts "Found service_offerings: #{service_offerings[:resources].count}"
   json = curl("/v3/service_offerings/#{service_offerings[:resources].first[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("service_offering", json)
 
@@ -71,7 +71,7 @@ task :get_fixtures, [:org] do |_t, args|
   write_fixture("service_plans", json)
   service_plans = ActiveSupport::JSON.decode(json).deep_symbolize_keys
   plan_guids = service_plans[:resources].collect { |b| b[:guid] }
-  puts "Found service_plans: #{service_plans[:resources].count}"
+  $stderr.puts "Found service_plans: #{service_plans[:resources].count}"
   json = curl("/v3/service_plans/#{service_plans[:resources].first[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("service_plan", json)
 
@@ -80,7 +80,7 @@ task :get_fixtures, [:org] do |_t, args|
   write_fixture("service_instances", json)
   service_instances = ActiveSupport::JSON.decode(json).deep_symbolize_keys
   service_instances[:resources].collect { |b| b[:guid] }
-  puts "Found service_instances: #{service_instances[:resources].count}"
+  $stderr.puts "Found service_instances: #{service_instances[:resources].count}"
   json = curl("/v3/service_instances/#{service_instances[:resources].first[:guid]}", debug: ENV.fetch("DEBUG", nil))
   write_fixture("service_instance", json)
 
@@ -89,7 +89,7 @@ task :get_fixtures, [:org] do |_t, args|
 
   # change anything else that looks like a guid to a test-guid using ruby
   Dir.glob("spec/support/fixtures/*.json").each do |f|
-    puts "Sanitizing and relinking #{f}..."
+    $stderr.puts "Sanitizing and relinking #{f}..."
 
     service_instances[:resources].each_with_index do |instance, i|
       File.write(f, File.read(f).gsub(/#{instance[:guid]}/, "test-service-instance-#{i}-guid"))
@@ -117,15 +117,15 @@ task :get_fixtures, [:org] do |_t, args|
     end
 
     spaces[:resources].each_with_index do |space, i|
-      puts "replacing #{space[:guid]} with test-space-#{i}-guid"
-      puts "replacing #{space[:name]} with test-space-#{i}-name"
+      $stderr.puts "replacing #{space[:guid]} with test-space-#{i}-guid"
+      $stderr.puts "replacing #{space[:name]} with test-space-#{i}-name"
       File.write(f, File.read(f).gsub(/#{space[:guid]}/, "test-space-#{i}-guid"))
       File.write(f, File.read(f).gsub(/#{space[:name]}/, "test-space-#{i}-name"))
     end
 
     users[:resources].each_with_index do |user, i|
-      puts "replacing #{user[:guid]} with test-user-#{i}-guid"
-      puts "replacing #{user[:username]} with test-user-#{i}-username"
+      $stderr.puts "replacing #{user[:guid]} with test-user-#{i}-guid"
+      $stderr.puts "replacing #{user[:username]} with test-user-#{i}-username"
       File.write(f, File.read(f).gsub(/#{user[:guid]}/, "test-user-#{i}-guid"))
       # File.write(f, File.read(f).gsub(%r/#{user[:username]}/, "test-user-#{i}-username"))
       # File.write(f, File.read(f).gsub(%r/#{user[:presentation_name]}/, "test-user-#{i}-username"))
@@ -139,7 +139,7 @@ task :get_fixtures, [:org] do |_t, args|
   end
 
   # TODO: validate the files were gsubbed correctly-ish
-  # puts "Basic validation..."
+  # $stderr.puts "Basic validation..."
   # %w[organization space service_broker service_offering service_plan service_instance].each do |resource|
   #   files = File.read(File.join(__dir__, "spec", "support", "fixtures", "#{resource.pluralize}.json"))
   #   file = File.read(File.join(__dir__, "spec", "support", "fixtures", "#{resource}.json"))
@@ -151,14 +151,14 @@ task :get_fixtures, [:org] do |_t, args|
   #   end
   # end
 
-  puts "Done."
+  $stderr.puts "Done."
 end
 # rubocop:enable Layout/LineLength,Metrics/BlockLength
 
 def curl(url, debug: false)
-  puts "cf curl \"#{url}\"" if debug
+  $stderr.puts "cf curl \"#{url}\"" if debug
   resp = `cf curl "#{url}" | jq .`
-  puts resp if debug
+  $stderr.puts resp if debug
   resp
 end
 

@@ -30,7 +30,7 @@ module JCF
           o
         end
       rescue NoMethodError
-        puts "object is #{hash[:resources]}"
+        $stderr.puts "object is #{hash[:resources]}"
       end
     end
   end

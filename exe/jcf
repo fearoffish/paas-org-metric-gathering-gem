@@ -8,14 +8,14 @@ cli = Dry::CLI.new(JCF::CLI)
 begin
   cli.call
 rescue JCF::CLI::NotLoggedInError => e
-  puts "You are not logged in to Cloud Foundry. Please log in and try again."
-  puts e.message
+  $stderr.puts "You are not logged in to Cloud Foundry. Please log in and try again."
+  $stderr.puts e.message
 rescue JCF::CLI::InvalidOptionError => e
-  puts "You need to supply options. Use --help to get details."
-  puts e.message
+  $stderr.puts "You need to supply options. Use --help to get details."
+  $stderr.puts e.message
 rescue NoMethodError => e
-  puts "Unexpected error. Please report this."
-  puts
-  puts e.message
-  puts e.backtrace
+  $stderr.puts "Unexpected error. Please report this."
+  $stderr.puts
+  $stderr.puts e.message
+  $stderr.puts e.backtrace
 end

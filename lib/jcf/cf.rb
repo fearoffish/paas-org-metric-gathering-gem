@@ -21,7 +21,7 @@ module JCF
 
     def self.do_curl(url)
       JCF.cache.get_or_set("cf curl \"/v3/#{url}\"".parameterize) do
-        puts "cf curl \"/v3/#{url}\"" if ENV["DEBUG"]
+        $stderr.puts "cf curl \"/v3/#{url}\"" if ENV["DEBUG"]
         `cf curl \"/v3/#{url}\"`
       end
     end
