@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jcf (0.0.11)
+    jcf (0.0.12)
       active_model_serializers (~> 0.10)
       activemodel (~> 7.0)
       activesupport (~> 7.0)
@@ -146,6 +146,8 @@ GEM
     mutex_m (0.1.2)
     nokogiri (1.15.4-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.15.4-x86_64-linux)
+      racc (~> 1.4)
     parallel (1.23.0)
     parser (3.2.2.4)
       ast (~> 2.4.1)
@@ -234,6 +236,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   aruba (~> 2.1.0)
@@ -247,4 +250,4 @@ DEPENDENCIES
   rubocop-rspec (~> 2.24)
 
 BUNDLED WITH
-   2.4.20
+   2.4.21
